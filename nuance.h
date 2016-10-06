@@ -5,7 +5,8 @@
 extern "C" {
 #endif
 
-int SetLicense(char *licenceFile, char *oemCode);
+int SetLicense(char *licenseFile, char *oemCode);
+int InitPDF(char *company,char *product);
 
 #ifdef __cplusplus
 }

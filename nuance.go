@@ -9,8 +9,13 @@ package nuance
 */
 import "C"
 
-func SetLicense(licenceFile string, oemCode string) (r bool) {
-	r = C.SetLicense(C.CString(licenceFile), C.CString(oemCode)) == 0
+func SetLicense(licenseFile string, oemCode string) (r bool) {
+	r = C.SetLicense(C.CString(licenseFile), C.CString(oemCode)) == 0
+	return
+}
+
+func InitPDF(company string, product string) (r bool) {
+	r = C.InitPDF(C.CString(company), C.CString(product)) == 0
 	return
 }
 

@@ -12,10 +12,10 @@ const oemLicenseTxtFile = "/src/license.txt"
 // replace it with your license file
 const oemLicenseFile = "/src/license.lcxz"
 
-func loadLicenceTxt() string {
+func loadlicenseTxt() string {
 	code, err := ioutil.ReadFile(oemLicenseFile)
 	if err != nil {
-		log.Fatal("Error loading licence file", oemLicenseFile, err)
+		log.Fatal("Error loading license file", oemLicenseFile, err)
 	}
 
 	return string(code)
@@ -23,11 +23,29 @@ func loadLicenceTxt() string {
 
 func TestSetLicense(t *testing.T) {
 
-	oemCode := loadLicenceTxt()
+	oemCode := loadlicenseTxt()
 
 	r := SetLicense(oemLicenseFile, oemCode)
 
 	if !r {
 		t.Fatal("SetLicense failed")
 	}
+}
+
+func TestInitPDF(t *testing.T) {
+
+	oemCode := loadlicenseTxt()
+
+	r := SetLicense(oemLicenseFile, oemCode)
+
+	if !r {
+		t.Fatal("SetLicense failed")
+	}
+
+	r = InitPDF("YOUR_COMPANY", "YOUR_PRODUCT")
+
+	if !r {
+		t.Fatal("InitPDF failed")
+	}
+
 }
