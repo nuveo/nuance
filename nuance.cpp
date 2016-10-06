@@ -5,8 +5,8 @@
 #include <KernelApi.h>
 #include <recpdf.h>
 
-int SetLicense(char *licenseFile, char *oemCode) {
-    RECERR rc = kRecSetLicense(licenseFile, oemCode);
+int SetLicense(const char *licenceFile, const char *oemCode) {
+    RECERR rc = kRecSetLicense(licenceFile, oemCode);
     if (rc != REC_OK) {
         printf("Error code = %X\n", rc);
         return -1;
@@ -14,7 +14,7 @@ int SetLicense(char *licenseFile, char *oemCode) {
     return 0;
 }
 
-int InitPDF(char *company,char *product) {
+int InitPDF(const char *company,const char *product) {
 
     printf("Initializing the Engine -- kRecInit()\n");
 
