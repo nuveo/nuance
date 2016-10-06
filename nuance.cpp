@@ -3,6 +3,7 @@
 #include <recpdf.h>
 
 #include "nuance.h"
+#include <cstring>
 
 HFORMTEMPLATEPAGE *formTemplateArray;
 int formTemplateArrayLen = 0;
@@ -18,7 +19,9 @@ int SetLicense(const char *licenceFile, const char *oemCode) {
 
     RECERR rc = kRecSetLicense(licenceFile, oemCode);
     if (rc != REC_OK) {
-        printf("Error code = %X\n", rc);
+        char errStr[1024] = "";
+        errMsg(rc, errStr);
+        printf("%s\n", errStr);
         Quit();
         return -1;
     }
@@ -34,7 +37,9 @@ int InitPDF(const char *company,const char *product) {
         (rc != API_INIT_WARN) &&
         (rc != API_LICENSEVALIDATION_WARN)) {
 
-        printf("Error code = %X\n", rc);
+        char errStr[1024] = "";
+        errMsg(rc, errStr);
+        printf("%s\n", errStr);
         Quit();
         return -1;
     }
@@ -50,6 +55,9 @@ int InitPDF(const char *company,const char *product) {
     rc = rPdfInit();
     if (rc != REC_OK) {
         printf("Error code = %X\n", rc);
+        char errStr[1024] = "";
+        errMsg(rc, errStr);
+        printf("%s\n", errStr);
         Quit();
         return -1;
     }
@@ -63,9 +71,33 @@ int LoadFormTemplateLibrary(const char *templateFile) {
 
     RECERR rc = kRecLoadFormTemplateLibrary(0, "fgv.ftl", TRUE, &formTemplateArray, &formTemplateArrayLen);
     if (rc != REC_OK) {
-        printf("Error code = %X\n", rc);
+        char errStr[1024] = "";
+        errMsg(rc, errStr);
+        printf("%s\n", errStr);
         Quit();
         return -1;
     }
     return 0;
+}
+
+void errMsg(RECERR rc, char* errStr) {
+    LONG ErrExt;
+    char szBuff[1024];
+    char ErrStr[512];
+    const char *symb = NULL;
+
+    memset(szBuff, 0, sizeof(szBuff));
+    memset(ErrStr, 0, sizeof(ErrStr));
+
+    kRecGetLastError(&ErrExt, ErrStr, sizeof(ErrStr));
+
+    kRecGetErrorInfo(rc, &symb);
+    sprintf(szBuff + strlen(szBuff), "%s: ", symb);
+
+    int actlen = strlen(szBuff);
+    int remlen = sizeof(szBuff) - actlen - 1;
+
+    kRecGetErrorUIText(rc, ErrExt, ErrStr, szBuff + actlen, &remlen);
+
+    strcpy(errStr, szBuff);
 }

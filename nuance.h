@@ -5,6 +5,7 @@
 extern "C" {
 #endif
 
+void errMsg(RECERR rc, char* errStr);
 void Quit(void);
 int SetLicense(const char *licenseFile, const char *oemCode);
 int InitPDF(const char *company,const char *product);
