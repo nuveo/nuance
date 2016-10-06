@@ -30,6 +30,8 @@ func TestSetLicense(t *testing.T) {
 	if !r {
 		t.Fatal("SetLicense failed")
 	}
+
+	Quit()
 }
 
 func TestInitPDF(t *testing.T) {
@@ -48,4 +50,24 @@ func TestInitPDF(t *testing.T) {
 		t.Fatal("InitPDF failed")
 	}
 
+	Quit()
+}
+
+func TestLoadFormTemplateLibrary(t *testing.T) {
+
+	oemCode := loadlicenseTxt()
+
+	r := SetLicense(oemLicenseFile, oemCode)
+
+	if !r {
+		t.Fatal("SetLicense failed")
+	}
+
+	r = LoadFormTemplateLibrary("/src/template.ftl")
+
+	if !r {
+		t.Fatal("LoadFormTemplateLibrary failed")
+	}
+
+	Quit()
 }

@@ -5,8 +5,10 @@
 extern "C" {
 #endif
 
+void Quit(void);
 int SetLicense(const char *licenseFile, const char *oemCode);
 int InitPDF(const char *company,const char *product);
+int LoadFormTemplateLibrary(const char *templateFile);
 
 #ifdef __cplusplus
 }

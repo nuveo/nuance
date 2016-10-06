@@ -1,14 +1,25 @@
-#include "nuance.h"
-
 #include <cstdio>
-
 #include <KernelApi.h>
 #include <recpdf.h>
 
+#include "nuance.h"
+
+HFORMTEMPLATEPAGE *formTemplateArray;
+int formTemplateArrayLen = 0;
+
+void Quit(void) {
+    printf("Quit -- kRecQuit\n");
+    kRecQuit();
+}
+
 int SetLicense(const char *licenceFile, const char *oemCode) {
+
+    printf("Set License -- kRecSetLicense()\n");
+
     RECERR rc = kRecSetLicense(licenceFile, oemCode);
     if (rc != REC_OK) {
         printf("Error code = %X\n", rc);
+        Quit();
         return -1;
     }
     return 0;
@@ -24,6 +35,7 @@ int InitPDF(const char *company,const char *product) {
         (rc != API_LICENSEVALIDATION_WARN)) {
 
         printf("Error code = %X\n", rc);
+        Quit();
         return -1;
     }
 
@@ -38,8 +50,22 @@ int InitPDF(const char *company,const char *product) {
     rc = rPdfInit();
     if (rc != REC_OK) {
         printf("Error code = %X\n", rc);
+        Quit();
         return -1;
     }
 
+    return 0;
+}
+
+int LoadFormTemplateLibrary(const char *templateFile) {
+
+    printf("Open template library -- kRecLoadFormTemplateLibrary()\n");
+
+    RECERR rc = kRecLoadFormTemplateLibrary(0, "fgv.ftl", TRUE, &formTemplateArray, &formTemplateArrayLen);
+    if (rc != REC_OK) {
+        printf("Error code = %X\n", rc);
+        Quit();
+        return -1;
+    }
     return 0;
 }
