@@ -10,23 +10,55 @@ package nuance
 #include "nuance.h"
 */
 import "C"
+import (
+	"errors"
+	"unsafe"
+)
 
 func Quit() {
 	C.Quit()
 }
 
-func SetLicense(licenseFile string, oemCode string) (r bool) {
-	r = C.SetLicense(C.CString(licenseFile), C.CString(oemCode)) == 0
+func SetLicense(licenseFile string, oemCode string) (err error) {
+	errBuff := make([]byte, 1024)
+	if C.SetLicense(C.CString(licenseFile),
+		C.CString(oemCode),
+		(*C.char)(unsafe.Pointer(&errBuff[0])),
+		C.int(len(errBuff))) != 0 {
+
+		err = errors.New(string(errBuff))
+		return
+	}
+
+	err = nil
 	return
 }
 
-func InitPDF(company string, product string) (r bool) {
-	r = C.InitPDF(C.CString(company), C.CString(product)) == 0
+func InitPDF(company string, product string) (err error) {
+	errBuff := make([]byte, 1024)
+	if C.InitPDF(C.CString(company), C.CString(product),
+		(*C.char)(unsafe.Pointer(&errBuff[0])),
+		C.int(len(errBuff))) != 0 {
+
+		err = errors.New(string(errBuff))
+		return
+	}
+
+	err = nil
 	return
 }
 
-func LoadFormTemplateLibrary(templateFile string) (r bool) {
-	r = C.LoadFormTemplateLibrary(C.CString(templateFile)) == 0
+func LoadFormTemplateLibrary(templateFile string) (err error) {
+	errBuff := make([]byte, 1024)
+	if C.LoadFormTemplateLibrary(C.CString(templateFile),
+		(*C.char)(unsafe.Pointer(&errBuff[0])),
+		C.int(len(errBuff))) != 0 {
+
+		err = errors.New(string(errBuff))
+		return
+	}
+
+	err = nil
 	return
 }
 

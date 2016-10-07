@@ -25,10 +25,10 @@ func TestSetLicense(t *testing.T) {
 
 	oemCode := loadlicenseTxt()
 
-	r := SetLicense(oemLicenseFile, oemCode)
+	err := SetLicense(oemLicenseFile, oemCode)
 
-	if !r {
-		t.Fatal("SetLicense failed")
+	if err != nil {
+		t.Fatal("SetLicense failed:", err)
 	}
 
 	Quit()
@@ -38,16 +38,16 @@ func TestInitPDF(t *testing.T) {
 
 	oemCode := loadlicenseTxt()
 
-	r := SetLicense(oemLicenseFile, oemCode)
+	err := SetLicense(oemLicenseFile, oemCode)
 
-	if !r {
-		t.Fatal("SetLicense failed")
+	if err != nil {
+		t.Fatal("SetLicense failed:", err)
 	}
 
-	r = InitPDF("YOUR_COMPANY", "YOUR_PRODUCT")
+	err = InitPDF("YOUR_COMPANY", "YOUR_PRODUCT")
 
-	if !r {
-		t.Fatal("InitPDF failed")
+	if err != nil {
+		t.Fatal("InitPDF failed:", err)
 	}
 
 	Quit()
@@ -57,16 +57,16 @@ func TestLoadFormTemplateLibrary(t *testing.T) {
 
 	oemCode := loadlicenseTxt()
 
-	r := SetLicense(oemLicenseFile, oemCode)
+	err := SetLicense(oemLicenseFile, oemCode)
 
-	if !r {
-		t.Fatal("SetLicense failed")
+	if err != nil {
+		t.Fatal("SetLicense failed:", err)
 	}
 
-	r = LoadFormTemplateLibrary("/src/template.ftl")
+	err = LoadFormTemplateLibrary("/src/template.ftl")
 
-	if !r {
-		t.Fatal("LoadFormTemplateLibrary failed")
+	if err != nil {
+		t.Fatal("LoadFormTemplateLibrary failed:", err)
 	}
 
 	Quit()
