@@ -3,6 +3,7 @@ package nuance
 import (
 	"io/ioutil"
 	"log"
+	"strings"
 	"testing"
 )
 
@@ -12,13 +13,15 @@ const oemLicenseTxtFile = "/src/license.txt"
 // replace it with your license file
 const oemLicenseFile = "/src/license.lcxz"
 
-func loadlicenseTxt() string {
-	code, err := ioutil.ReadFile(oemLicenseFile)
+func loadlicenseTxt() (r string) {
+	code, err := ioutil.ReadFile(oemLicenseTxtFile)
 	if err != nil {
-		log.Fatal("Error loading license file", oemLicenseFile, err)
+		log.Fatal("Error loading license file", oemLicenseTxtFile, err)
 	}
 
-	return string(code)
+	r = strings.TrimSpace(string(code))
+
+	return r
 }
 
 func TestSetLicense(t *testing.T) {

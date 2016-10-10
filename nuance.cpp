@@ -1,9 +1,9 @@
 #include <cstdio>
+#include <cstring>
 #include <KernelApi.h>
 #include <recpdf.h>
 
 #include "nuance.h"
-#include <cstring>
 
 HFORMTEMPLATEPAGE *formTemplateArray;
 int formTemplateArrayLen = 0;
