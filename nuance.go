@@ -34,9 +34,11 @@ func SetLicense(licenseFile string, oemCode string) (err error) {
 	return
 }
 
-func InitPDF(company string, product string) (err error) {
+func InitNuance(company string, product string) (err error) {
 	errBuff := make([]byte, 1024)
-	if C.InitPDF(C.CString(company), C.CString(product),
+	if C.InitNuance(
+		C.CString(company),
+		C.CString(product),
 		(*C.char)(unsafe.Pointer(&errBuff[0])),
 		C.int(len(errBuff))) != 0 {
 

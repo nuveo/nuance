@@ -26,3 +26,9 @@ _testmain.go
 *.lcxz
 
 license.txt
+
+license.h
+
+template.tlz
+
+template.ftl

@@ -37,20 +37,18 @@ func TestSetLicense(t *testing.T) {
 	Quit()
 }
 
-func TestInitPDF(t *testing.T) {
+func TestInitNuance(t *testing.T) {
 
 	oemCode := loadlicenseTxt()
 
 	err := SetLicense(oemLicenseFile, oemCode)
-
 	if err != nil {
 		t.Fatal("SetLicense failed:", err)
 	}
 
-	err = InitPDF("YOUR_COMPANY", "YOUR_PRODUCT")
-
+	err = InitNuance("YOUR_COMPANY", "YOUR_PRODUCT")
 	if err != nil {
-		t.Fatal("InitPDF failed:", err)
+		t.Fatal("InitNuance failed:", err)
 	}
 
 	Quit()

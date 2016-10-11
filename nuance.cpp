@@ -5,7 +5,7 @@
 
 #include "nuance.h"
 
-HFORMTEMPLATEPAGE *formTemplateArray;
+HFORMTEMPLATEPAGE *formTemplateArray; // TODO: transform into an array with the loaded instances.
 int formTemplateArrayLen = 0;
 
 void Quit(void) {
@@ -23,7 +23,7 @@ int SetLicense(const char *licenceFile, const char *oemCode, char *errStr, int e
     return 0;
 }
 
-int InitPDF(const char *company,const char *product, char *errStr, int errSize) {
+int InitNuance(const char *company,const char *product, char *errStr, int errSize) {
 
     RECERR rc = kRecInit(company, product);
     if ((rc != REC_OK) &&
@@ -31,13 +31,7 @@ int InitPDF(const char *company,const char *product, char *errStr, int errSize) 
         (rc != API_LICENSEVALIDATION_WARN)) {
 
         errMsg(rc, errStr, errSize);
-        Quit();
-        return -1;
-    }
-
-    rc = rPdfInit();
-    if (rc != REC_OK) {
-        errMsg(rc, errStr, errSize);
+        printf("kRecInit %s\n", errStr);
         Quit();
         return -1;
     }
@@ -47,7 +41,7 @@ int InitPDF(const char *company,const char *product, char *errStr, int errSize) 
 
 int LoadFormTemplateLibrary(const char *templateFile, char *errStr, int errSize) {
 
-    RECERR rc = kRecLoadFormTemplateLibrary(0, "fgv.ftl", TRUE, &formTemplateArray, &formTemplateArrayLen);
+    RECERR rc = kRecLoadFormTemplateLibrary(0, templateFile, TRUE, &formTemplateArray, &formTemplateArrayLen);
     if (rc != REC_OK) {
         errMsg(rc, errStr, errSize);
         Quit();

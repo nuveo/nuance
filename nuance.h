@@ -10,7 +10,7 @@ extern "C" {
 void errMsg(RECERR rc, char* errBuff, int errBuffSize);
 void Quit(void);
 int SetLicense(const char *licenceFile, const char *oemCode, char *errStr, int errSize);
-int InitPDF(const char *company,const char *product, char *errStr, int errSize);
+int InitNuance(const char *company,const char *product, char *errStr, int errSize);
 int LoadFormTemplateLibrary(const char *templateFile, char *errStr, int errSize);
 
 #ifdef __cplusplus
