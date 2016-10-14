@@ -1,6 +1,7 @@
 package nuance
 
 import (
+	"fmt"
 	"io/ioutil"
 	"log"
 	"strings"
@@ -28,47 +29,90 @@ func TestSetLicense(t *testing.T) {
 
 	oemCode := loadlicenseTxt()
 
-	err := SetLicense(oemLicenseFile, oemCode)
+	n := New()
+	err := n.SetLicense(oemLicenseFile, oemCode)
 
 	if err != nil {
 		t.Fatal("SetLicense failed:", err)
 	}
 
-	Quit()
+	n.Quit()
+	n.Free()
 }
 
-func TestInitNuance(t *testing.T) {
+func TestInit(t *testing.T) {
 
 	oemCode := loadlicenseTxt()
 
-	err := SetLicense(oemLicenseFile, oemCode)
+	n := New()
+
+	err := n.SetLicense(oemLicenseFile, oemCode)
 	if err != nil {
 		t.Fatal("SetLicense failed:", err)
 	}
 
-	err = InitNuance("YOUR_COMPANY", "YOUR_PRODUCT")
+	err = n.Init("YOUR_COMPANY", "YOUR_PRODUCT")
 	if err != nil {
-		t.Fatal("InitNuance failed:", err)
+		t.Fatal("Init failed:", err)
 	}
 
-	Quit()
+	n.Quit()
+	n.Free()
+
 }
 
 func TestLoadFormTemplateLibrary(t *testing.T) {
 
 	oemCode := loadlicenseTxt()
 
-	err := SetLicense(oemLicenseFile, oemCode)
+	n := New()
 
+	err := n.SetLicense(oemLicenseFile, oemCode)
 	if err != nil {
 		t.Fatal("SetLicense failed:", err)
 	}
 
-	err = LoadFormTemplateLibrary("/src/template.ftl")
-
+	err = n.LoadFormTemplateLibrary("/src/template.ftl")
 	if err != nil {
 		t.Fatal("LoadFormTemplateLibrary failed:", err)
 	}
 
-	Quit()
+	n.Quit()
+	n.Free()
+
+}
+
+func TestOCRImgWithTemplate(t *testing.T) {
+
+	oemCode := loadlicenseTxt()
+
+	n := New()
+
+	err := n.SetLicense(oemLicenseFile, oemCode)
+	if err != nil {
+		t.Fatal("SetLicense failed:", err)
+	}
+
+	err = n.Init("YOUR_COMPANY", "YOUR_PRODUCT")
+	if err != nil {
+		t.Fatal("Init failed:", err)
+	}
+
+	err = n.LoadFormTemplateLibrary("/src/template.ftl")
+	if err != nil {
+		t.Fatal("LoadFormTemplateLibrary failed:", err)
+	}
+
+	var ret map[string]string
+	ret, err = n.OCRImgWithTemplate("/src/sample.tif")
+	if err != nil {
+		t.Fatal("OCRImgWithTemplate failed:", err)
+	}
+
+	for k, v := range ret {
+		fmt.Println("k:", k, "v:", v)
+	}
+
+	n.Quit()
+	n.Free()
 }
