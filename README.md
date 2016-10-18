@@ -1,4 +1,5 @@
 # Nuance SDK in Go
+[![GoDoc](https://godoc.org/github.com/nuveo/nuance?status.png)](https://godoc.org/github.com/nuveo/nuance)
 
 ## Installation
 
