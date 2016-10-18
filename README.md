@@ -4,6 +4,7 @@
 
 First install the 19.2 version of Nuance SDK
 
+*Debian Linux example:*
 ```
 dpkg -i nuance-omnipage-csdk-lib64_19.2-15521.100_amd64.deb
 dpkg -i nuance-omnipage-csdk-devel_19.2-15521.100_amd64.deb
@@ -68,7 +69,6 @@ err = n.LoadFormTemplateLibrary("template.ftl")
 if err != nil {
     fmt.Fatal("LoadFormTemplateLibrary failed:", err)
 }
-
 
 // loads and processes the image then returns a
 // map with the zone marked in the templete.
