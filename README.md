@@ -1,31 +1,10 @@
 # Nuance SDK in Go
 [![GoDoc](https://godoc.org/github.com/nuveo/nuance?status.png)](https://godoc.org/github.com/nuveo/nuance)
 
-## Installation
+This is a wrap of OCR libraries provided by Nuance in their SDK.
 
-First install the 19.2 version of Nuance SDK
+The goal is to use the OCR SDK features without polluting the code written in Go with many C calls as well provide a more task-based API, therefore this package does not exposes all nuance C API, instead many calls in C will be condensed in a few Go calls.
 
-*Debian Linux example:*
-```
-dpkg -i nuance-omnipage-csdk-lib64_19.2-15521.100_amd64.deb
-dpkg -i nuance-omnipage-csdk-devel_19.2-15521.100_amd64.deb
-```
-
-Then download the package
-
-```
-go get github.com/nuveo/nuance
-```
-
-To activate your licenses use the following command
-
-```
-oplicmgr -c OEM_CODE -N licence.lcxz PRODUCT_KEY1 PRODUCT_KEY2 PRODUCT_KEY3
-```
-
-You will need your license file and your OEM code in all the examples and tests.
-
----
 ## Examples
 
 ### SetLicence and initialise
@@ -88,3 +67,40 @@ for k, v := range ret {
 n.Quit()
 n.Free()
 ```
+
+## Running the tests
+
+At this point of development to run unit tests is necessary to provide your own license files, templates and samples.
+
+## Installation
+
+First install the 19.2 version of Nuance SDK
+
+*Debian Linux example:*
+```
+dpkg -i nuance-omnipage-csdk-lib64_19.2-15521.100_amd64.deb
+dpkg -i nuance-omnipage-csdk-devel_19.2-15521.100_amd64.deb
+```
+
+Then download the package
+
+```
+go get github.com/nuveo/nuance
+```
+
+To activate your licenses use the following command
+
+```
+oplicmgr -c OEM_CODE -N licence.lcxz PRODUCT_KEY1 PRODUCT_KEY2 PRODUCT_KEY3
+```
+
+You will need your license file and your OEM code in all the examples and tests.
+
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details
+
+## Acknowledgments
+
+This project is a wrap to Go of libraries provided in the Nuance SDK
