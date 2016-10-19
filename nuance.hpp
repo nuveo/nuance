@@ -40,6 +40,12 @@ public:
                                   char *errBuff,
                                   const int errSize);
 
+    int OCRImgToText(const char *imgFile,
+                     const char *outputFile,
+                     const char *auxDocumentFile,
+                     char *errBuff,
+                     const int errSize);
+
     int getZoneCount(void);
 
     int getZoneData(const int zoneID,

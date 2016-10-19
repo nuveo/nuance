@@ -122,3 +122,24 @@ func (n *nuance) OCRImgWithTemplate(imgFile string) (ret map[string]string, err 
 	err = nil
 	return
 }
+
+func (n *nuance) OCRImgToText(imgFile string,
+	outputFile string,
+	auxDocumentFile string) (err error) {
+	errBuff := make([]byte, 1024)
+
+	if C.nuanceOCRImgToText(
+		unsafe.Pointer(n.nuancePtr),
+		C.CString(imgFile),
+		C.CString(outputFile),
+		C.CString(auxDocumentFile),
+		(*C.char)(unsafe.Pointer(&errBuff[0])),
+		C.int(len(errBuff))) != 0 {
+
+		err = errors.New(string(errBuff))
+		return
+	}
+
+	err = nil
+	return
+}

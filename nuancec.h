@@ -7,6 +7,11 @@
 extern "C" {
 #endif
 
+
+void RecSample(void);
+
+
+
 typedef void* nuancePtr;
 
 nuancePtr nuanceNew(void);
@@ -46,6 +51,13 @@ int nuanceGetZoneData(nuancePtr n,
                       const int zoneTextSize);
 
 void nuanceFreeImgWithTemplate(nuancePtr n);
+
+int nuanceOCRImgToText(nuancePtr n,
+                       const char *imgFile,
+                       const char *outputFile,
+                       const char *auxDocumentFile,
+                       char *errBuff,
+                       const int errSize);
 
 #ifdef __cplusplus
 }
