@@ -1,9 +1,14 @@
 # Nuance SDK in Go
 [![GoDoc](https://godoc.org/github.com/nuveo/nuance?status.png)](https://godoc.org/github.com/nuveo/nuance)
 
-This is a wrap of OCR libraries provided by Nuance in their SDK.
+This is a wrapper for the OCR libraries provided by Nuance in their SDK.
 
-The goal is to use the OCR SDK features without polluting the code written in Go with many C calls as well provide a more task-based API, therefore this package does not exposes all nuance C API, instead many calls in C will be condensed in a few Go calls.
+The goals are:
+
+1. To enable the OCR SDK features without polluting the Go code with numerous C functions
+2. To provide a more task-based API
+
+As a result this package does not exposes the complete Nuance C API but instead condenses many C calls into a few Go methods.
 
 ## Examples
 
@@ -27,7 +32,7 @@ n.Free()
 ---
 ### Processes zones
 
-Processes image and template and extract information from zones.
+Processes an image (with template) and extracts information from zones.
 
 ```go
 n := nuveo.New()
@@ -70,7 +75,7 @@ n.Free()
 
 ## Running the tests
 
-At this point of development to run unit tests is necessary to provide your own license files, templates and samples.
+At this stage of the development it is necessary to provide your own license files, templates and samples in order to run unit tests.
 
 ## Installation
 
