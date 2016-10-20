@@ -125,6 +125,7 @@ func (n *nuance) OCRImgWithTemplate(imgFile string) (ret map[string]string, err 
 
 func (n *nuance) OCRImgToText(imgFile string,
 	outputFile string,
+	nPage int,
 	auxDocumentFile string) (err error) {
 	errBuff := make([]byte, 1024)
 
@@ -132,6 +133,7 @@ func (n *nuance) OCRImgToText(imgFile string,
 		unsafe.Pointer(n.nuancePtr),
 		C.CString(imgFile),
 		C.CString(outputFile),
+		C.int(nPage),
 		C.CString(auxDocumentFile),
 		(*C.char)(unsafe.Pointer(&errBuff[0])),
 		C.int(len(errBuff))) != 0 {
@@ -149,6 +151,25 @@ func (n *nuance) SetLanguagePtBr() (err error) {
 
 	if C.nuanceSetLanguagePtBr(
 		unsafe.Pointer(n.nuancePtr),
+		(*C.char)(unsafe.Pointer(&errBuff[0])),
+		C.int(len(errBuff))) != 0 {
+
+		err = errors.New(string(errBuff))
+		return
+	}
+
+	err = nil
+	return
+}
+
+func (n *nuance) CountPages(imgFile string) (nPage int, err error) {
+	errBuff := make([]byte, 1024)
+	nPage = 0
+
+	if C.nuanceCountPages(
+		unsafe.Pointer(n.nuancePtr),
+		C.CString(imgFile),
+		(*C.int)(unsafe.Pointer(&nPage)),
 		(*C.char)(unsafe.Pointer(&errBuff[0])),
 		C.int(len(errBuff))) != 0 {
 

@@ -134,6 +134,7 @@ func TestOCRImgToText(t *testing.T) {
 
 	err = n.OCRImgToText("/src/sample.tif",
 		"/src/sample.txt",
+		0,
 		"/src/sample.doc")
 	if err != nil {
 		t.Fatal("OCRImgToText failed:", err)

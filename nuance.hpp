@@ -42,6 +42,7 @@ public:
 
     int OCRImgToText(const char *imgFile,
                      const char *outputFile,
+                     const int nPage,
                      const char *auxDocumentFile,
                      char *errBuff,
                      const int errSize);
@@ -57,6 +58,11 @@ public:
     int FreeImgWithTemplate(void);
 
     int SetLanguagePtBr(char *errBuff, const int errSize);
+
+    int CountPages(const char *imgFile,
+                   int *nPages,
+                   char *errBuff,
+                   const int errSize);
 
     void Quit(void);
 };

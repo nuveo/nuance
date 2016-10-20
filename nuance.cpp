@@ -234,13 +234,14 @@ int nuance::FreeImgWithTemplate(void) {
 
 int nuance::OCRImgToText(const char *imgFile,
                          const char *outputFile,
+                         const int nPage,
                          const char *auxDocumentFile,
                          char *errBuff,
                          const int errSize) {
 
     RECERR      rc;
 
-    rc = kRecLoadImgF(0, imgFile, &this->hPage, 0);
+    rc = kRecLoadImgF(0, imgFile, &this->hPage, nPage);
     if (rc != REC_OK) {
         errMsg(rc, errBuff, errSize);
         RecQuitPlus();
@@ -288,7 +289,7 @@ int nuance::OCRImgToText(const char *imgFile,
         return -1;
     }
 
-    rc = RecInsertPage(0, hDoc, this->hPage, 0);
+    rc = RecInsertPage(0, hDoc, this->hPage, nPage);
     if (rc != REC_OK) {
         errMsg(rc, errBuff, errSize);
         RecCloseDoc(0, hDoc);
@@ -332,5 +333,31 @@ int nuance::SetLanguagePtBr(char *errBuff, const int errSize) {
         return -1;
     }
 
+    return 0;
+}
+
+int nuance::CountPages(const char *imgFile,
+                       int *nPages,
+                       char *errBuff,
+                       const int errSize) {
+    RECERR      rc;
+    HIMGFILE    hIFile;
+
+    rc = kRecOpenImgFile(imgFile, &hIFile, IMGF_READ, FF_SIZE);
+    if (rc != REC_OK) {
+        errMsg(rc, errBuff, errSize);
+        kRecQuit();
+        return -1;
+    }
+
+    rc = kRecGetImgFilePageCount(hIFile, nPages);
+    if (rc != REC_OK) {
+        errMsg(rc, errBuff, errSize);
+        kRecCloseImgFile(hIFile);
+        kRecQuit();
+        return -1;
+    }
+
+    kRecCloseImgFile(hIFile);
     return 0;
 }

@@ -96,6 +96,7 @@ void nuanceFreeImgWithTemplate(nuancePtr n) {
 int nuanceOCRImgToText(nuancePtr n,
                        const char *imgFile,
                        const char *outputFile,
+                       const int nPage,
                        const char *auxDocumentFile,
                        char *errBuff,
                        const int errSize) {
@@ -103,6 +104,7 @@ int nuanceOCRImgToText(nuancePtr n,
     nuance *ptr = (nuance*)n;
     return ptr->OCRImgToText(imgFile,
                              outputFile,
+                             nPage,
                              auxDocumentFile,
                              errBuff,
                              errSize);
@@ -113,4 +115,17 @@ int nuanceSetLanguagePtBr(nuancePtr n, char *errBuff, const int errSize) {
 
     nuance *ptr = (nuance*)n;
     return ptr->SetLanguagePtBr(errBuff, errSize);
+}
+
+int nuanceCountPages(nuancePtr n,
+                     const char *imgFile,
+                     int *nPages,
+                     char *errBuff,
+                     const int errSize) {
+
+    nuance *ptr = (nuance*)n;
+    return ptr->CountPages(imgFile,
+                           nPages,
+                           errBuff,
+                           errSize);
 }

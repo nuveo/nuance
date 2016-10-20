@@ -55,11 +55,20 @@ void nuanceFreeImgWithTemplate(nuancePtr n);
 int nuanceOCRImgToText(nuancePtr n,
                        const char *imgFile,
                        const char *outputFile,
+                       const int nPage,
                        const char *auxDocumentFile,
                        char *errBuff,
                        const int errSize);
 
-int nuanceSetLanguagePtBr(nuancePtr n, char *errBuff, const int errSize);
+int nuanceSetLanguagePtBr(nuancePtr n,
+                          char *errBuff,
+                          const int errSize);
+
+int nuanceCountPages(nuancePtr n,
+                     const char *imgFile,
+                     int *nPages,
+                     char *errBuff,
+                     const int errSize);
 
 #ifdef __cplusplus
 }
