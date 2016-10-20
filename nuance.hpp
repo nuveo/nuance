@@ -56,6 +56,8 @@ public:
 
     int FreeImgWithTemplate(void);
 
+    int SetLanguagePtBr(char *errBuff, const int errSize);
+
     void Quit(void);
 };
 

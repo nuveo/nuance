@@ -238,10 +238,6 @@ int nuance::OCRImgToText(const char *imgFile,
                          char *errBuff,
                          const int errSize) {
 
-    char        szCodePageName[128];    // name of the Code Page
-    char        szFormatName[128];      // Output Text format name
-    char        chRej = '*';            // default rejection symbol is ~
-    WCHAR       wRej;
     RECERR      rc;
 
     rc = kRecLoadImgF(0, imgFile, &this->hPage, 0);
@@ -309,6 +305,27 @@ int nuance::OCRImgToText(const char *imgFile,
     }
 
     rc = RecCloseDoc(0, hDoc);
+    if (rc != REC_OK) {
+        errMsg(rc, errBuff, errSize);
+        RecQuitPlus();
+        return -1;
+    }
+
+    return 0;
+}
+
+// TODO: find a more generic way to set the language, without using "define" in the Golang side.
+int nuance::SetLanguagePtBr(char *errBuff, const int errSize) {
+    RECERR      rc;
+    LANG_ENA    pLang[LANG_SIZE];
+
+    for (int i=0; i<LANG_SIZE; i++) {
+        pLang[i] = LANG_DISABLED;
+    }
+
+    pLang[LANG_POR] = LANG_ENABLED;
+
+    rc = kRecSetLanguages(0, pLang);
     if (rc != REC_OK) {
         errMsg(rc, errBuff, errSize);
         RecQuitPlus();

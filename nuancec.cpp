@@ -108,3 +108,9 @@ int nuanceOCRImgToText(nuancePtr n,
                              errSize);
 
 }
+
+int nuanceSetLanguagePtBr(nuancePtr n, char *errBuff, const int errSize) {
+
+    nuance *ptr = (nuance*)n;
+    return ptr->SetLanguagePtBr(errBuff, errSize);
+}

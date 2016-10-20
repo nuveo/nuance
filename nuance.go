@@ -143,3 +143,19 @@ func (n *nuance) OCRImgToText(imgFile string,
 	err = nil
 	return
 }
+
+func (n *nuance) SetLanguagePtBr() (err error) {
+	errBuff := make([]byte, 1024)
+
+	if C.nuanceSetLanguagePtBr(
+		unsafe.Pointer(n.nuancePtr),
+		(*C.char)(unsafe.Pointer(&errBuff[0])),
+		C.int(len(errBuff))) != 0 {
+
+		err = errors.New(string(errBuff))
+		return
+	}
+
+	err = nil
+	return
+}

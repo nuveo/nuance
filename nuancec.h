@@ -59,6 +59,8 @@ int nuanceOCRImgToText(nuancePtr n,
                        char *errBuff,
                        const int errSize);
 
+int nuanceSetLanguagePtBr(nuancePtr n, char *errBuff, const int errSize);
+
 #ifdef __cplusplus
 }
 #endif
