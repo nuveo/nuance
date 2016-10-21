@@ -141,3 +141,27 @@ func TestOCRImgToText(t *testing.T) {
 	}
 
 }
+
+func TestMultiplePagesOCRImgToText(t *testing.T) {
+	oemCode := loadlicenseTxt()
+
+	n := New()
+
+	err := n.SetLicense(oemLicenseFile, oemCode)
+	if err != nil {
+		t.Fatal("SetLicense failed:", err)
+	}
+
+	err = n.Init("YOUR_COMPANY", "YOUR_PRODUCT")
+	if err != nil {
+		t.Fatal("Init failed:", err)
+	}
+
+	err = n.OCRImgToText("/src/sample.tif",
+		"/src/sample.txt",
+		0,
+		"/src/sample.doc")
+	if err != nil {
+		t.Fatal("OCRImgToText failed:", err)
+	}
+}

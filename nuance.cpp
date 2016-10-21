@@ -244,7 +244,6 @@ int nuance::OCRImgToText(const char *imgFile,
     rc = kRecLoadImgF(0, imgFile, &this->hPage, nPage);
     if (rc != REC_OK) {
         errMsg(rc, errBuff, errSize);
-        RecQuitPlus();
         return -1;
     }
 
@@ -252,7 +251,6 @@ int nuance::OCRImgToText(const char *imgFile,
     if (rc != REC_OK) {
         errMsg(rc, errBuff, errSize);
         kRecFreeImg(this->hPage);
-        RecQuitPlus();
         return -1;
     }
 
@@ -260,7 +258,6 @@ int nuance::OCRImgToText(const char *imgFile,
     if (rc != REC_OK) {
         errMsg(rc, errBuff, errSize);
         kRecFreeImg(this->hPage);
-        RecQuitPlus();
         return -1;
     }
 
@@ -268,7 +265,6 @@ int nuance::OCRImgToText(const char *imgFile,
     if (rc != REC_OK) {
         errMsg(rc, errBuff, errSize);
         kRecFreeImg(this->hPage);
-        RecQuitPlus();
         return -1;
     }
 
@@ -276,7 +272,6 @@ int nuance::OCRImgToText(const char *imgFile,
     if (rc != REC_OK) {
         errMsg(rc, errBuff, errSize);
         kRecFreeImg(this->hPage);
-        RecQuitPlus();
         return -1;
     }
 
@@ -285,7 +280,6 @@ int nuance::OCRImgToText(const char *imgFile,
     if (rc != REC_OK) {
         errMsg(rc, errBuff, errSize);
         kRecFreeImg(this->hPage);
-        RecQuitPlus();
         return -1;
     }
 
@@ -293,7 +287,6 @@ int nuance::OCRImgToText(const char *imgFile,
     if (rc != REC_OK) {
         errMsg(rc, errBuff, errSize);
         RecCloseDoc(0, hDoc);
-        RecQuitPlus();
         return -1;
     }
 
@@ -301,14 +294,12 @@ int nuance::OCRImgToText(const char *imgFile,
     if (rc != REC_OK) {
         errMsg(rc, errBuff, errSize);
         RecCloseDoc(0, hDoc);
-        RecQuitPlus();
         return -1;
     }
 
     rc = RecCloseDoc(0, hDoc);
     if (rc != REC_OK) {
         errMsg(rc, errBuff, errSize);
-        RecQuitPlus();
         return -1;
     }
 
