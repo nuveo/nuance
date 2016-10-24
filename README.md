@@ -15,7 +15,7 @@ As a result this package does not exposes the complete Nuance C API but instead 
 ### SetLicence and initialise
 
 ```go
-n := nuveo.New()
+n := nuance.New()
 err := n.SetLicense("licence.lcxz", "OEM_CODE")
 if err != nil {
     error.Fatal("SetLicense failed:", err)
@@ -35,7 +35,7 @@ n.Free()
 Processes an image (with template) and extracts information from zones.
 
 ```go
-n := nuveo.New()
+n := nuance.New()
 
 // load the license
 err := n.SetLicense("licence.lcxz", "OEM_CODE")
