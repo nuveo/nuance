@@ -242,7 +242,7 @@ int nuance::OCRImgToText(const char *imgFile,
     RECERR      rc;
 
     rc = kRecLoadImgF(0, imgFile, &this->hPage, nPage);
-    if (rc != REC_OK) {
+    if (rc != REC_OK && rc != IMG_DPI_WARN) {
         errMsg(rc, errBuff, errSize);
         return -1;
     }

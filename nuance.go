@@ -14,10 +14,19 @@ import (
 	"errors"
 	"fmt"
 	"unsafe"
+	"math/rand"
+	"time"
+	"path"
+	"os"
+	"io/ioutil"
 )
 
 type nuance struct {
 	nuancePtr C.nuancePtr
+}
+
+func init(){
+	rand.Seed(time.Now().UnixNano())
 }
 
 func New() (n nuance) {
@@ -123,7 +132,7 @@ func (n *nuance) OCRImgWithTemplate(imgFile string) (ret map[string]string, err 
 	return
 }
 
-func (n *nuance) OCRImgToText(imgFile string,
+func (n *nuance) OCRImgToFile(imgFile string,
 	outputFile string,
 	nPage int,
 	auxDocumentFile string) (err error) {
@@ -144,6 +153,40 @@ func (n *nuance) OCRImgToText(imgFile string,
 
 	err = nil
 	return
+}
+
+var letterRunes = []rune("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ")
+
+func randString(n int) string {
+	b := make([]rune, n)
+	for i := range b {
+		b[i] = letterRunes[rand.Intn(len(letterRunes))]
+	}
+	return string(b)
+}
+
+func (n *nuance) OCRImgToText(imgFile string,
+	nPage int,
+	) (txt string,err error) {
+	randomAux := randString(6)
+	tempDir := path.Join(os.TempDir(),randomAux)
+	tempFile := fmt.Sprintf("%s.txt", tempDir)
+	defer func() {
+		os.Remove(tempFile)
+		os.RemoveAll(tempDir)
+	}()
+	err = n.OCRImgToFile(imgFile, tempFile, nPage, tempDir)
+	if err != nil{
+		fmt.Println(err)
+		return "", err
+	}
+	rawTxt, err := ioutil.ReadFile(tempFile)
+	if err != nil {
+		fmt.Println(err)
+		return "", err
+	}
+	txt = string(rawTxt)
+	return 	
 }
 
 func (n *nuance) SetLanguagePtBr() (err error) {
