@@ -117,7 +117,7 @@ func TestOCRImgWithTemplate(t *testing.T) {
 	n.Free()
 }
 
-func TestOCRImgToText(t *testing.T) {
+func TestOCRImgToFile(t *testing.T) {
 	oemCode := loadlicenseTxt()
 
 	n := New()
@@ -132,7 +132,7 @@ func TestOCRImgToText(t *testing.T) {
 		t.Fatal("Init failed:", err)
 	}
 
-	err = n.OCRImgToText("/src/sample.tif",
+	err = n.OCRImgToFile("/src/sample.tif",
 		"/src/sample.txt",
 		0,
 		"/src/sample.doc")
@@ -164,7 +164,7 @@ func TestOCRImgToText(t *testing.T) {
 
 }
 
-func TestMultiplePagesOCRImgToText(t *testing.T) {
+func TestMultiplePagesOCRImgToFile(t *testing.T) {
 	oemCode := loadlicenseTxt()
 
 	n := New()
@@ -179,7 +179,7 @@ func TestMultiplePagesOCRImgToText(t *testing.T) {
 		t.Fatal("Init failed:", err)
 	}
 
-	err = n.OCRImgToText("/src/sample.tif",
+	err = n.OCRImgToFile("/src/sample.tif",
 		"/src/sample.txt",
 		0,
 		"/src/sample.doc")
