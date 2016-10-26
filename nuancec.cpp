@@ -93,7 +93,7 @@ void nuanceFreeImgWithTemplate(nuancePtr n) {
     ptr->FreeImgWithTemplate();
 }
 
-int nuanceOCRImgToText(nuancePtr n,
+int nuanceOCRImgToFile(nuancePtr n,
                        const char *imgFile,
                        const char *outputFile,
                        const int nPage,
@@ -102,7 +102,7 @@ int nuanceOCRImgToText(nuancePtr n,
                        const int errSize) {
 
     nuance *ptr = (nuance*)n;
-    return ptr->OCRImgToText(imgFile,
+    return ptr->OCRImgToFile(imgFile,
                              outputFile,
                              nPage,
                              auxDocumentFile,

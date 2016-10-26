@@ -232,7 +232,7 @@ int nuance::FreeImgWithTemplate(void) {
     kRecQuit();
 }
 
-int nuance::OCRImgToText(const char *imgFile,
+int nuance::OCRImgToFile(const char *imgFile,
                          const char *outputFile,
                          const int nPage,
                          const char *auxDocumentFile,
