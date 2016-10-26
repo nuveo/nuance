@@ -202,7 +202,7 @@ func (n *nuance) OCRImgToText(imgFile string) (txt string, err error) {
 			return
 		}
 		if len(txt) > 0 {
-			txt += "\f"
+			txt += "\n"
 		}
 		txt += aux
 	}
