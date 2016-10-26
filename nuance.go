@@ -25,6 +25,8 @@ type nuance struct {
 	nuancePtr C.nuancePtr
 }
 
+var letterRunes = []rune("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ")
+
 func init(){
 	rand.Seed(time.Now().UnixNano())
 }
@@ -138,7 +140,7 @@ func (n *nuance) OCRImgToFile(imgFile string,
 	auxDocumentFile string) (err error) {
 	errBuff := make([]byte, 1024)
 
-	if C.nuanceOCRImgToText(
+	if C.nuanceOCRImgToFile(
 		unsafe.Pointer(n.nuancePtr),
 		C.CString(imgFile),
 		C.CString(outputFile),
@@ -154,8 +156,6 @@ func (n *nuance) OCRImgToFile(imgFile string,
 	err = nil
 	return
 }
-
-var letterRunes = []rune("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ")
 
 func randString(n int) string {
 	b := make([]rune, n)
@@ -186,7 +186,7 @@ func (n *nuance) OCRImgPageToText(imgFile string,
 		return "", err
 	}
 	txt = string(rawTxt)
-	return 	
+	return
 }
 
 func (n *nuance) OCRImgToText(imgFile string) (txt string, err error){
@@ -197,13 +197,14 @@ func (n *nuance) OCRImgToText(imgFile string) (txt string, err error){
 	for i:=0;i < pages;i++{
 		aux, err := n.OCRImgPageToText(imgFile, i)
 		if err != nil{
-			return		
+			return
 		}
 		if len(txt) > 0{
 			txt += "\f"
 		}
 		txt += aux
 	}
+	return
 }
 
 func (n *nuance) SetLanguagePtBr() (err error) {
