@@ -242,7 +242,8 @@ int nuance::OCRImgToFile(const char *imgFile,
     RECERR      rc;
 
     rc = kRecLoadImgF(0, imgFile, &this->hPage, nPage);
-    if (rc != REC_OK && rc != IMG_DPI_WARN) {
+    if (rc != REC_OK &&
+        rc != IMG_DPI_WARN) {
         errMsg(rc, errBuff, errSize);
         return -1;
     }
@@ -269,7 +270,8 @@ int nuance::OCRImgToFile(const char *imgFile,
     }
 
     rc = kRecRecognize(0, this->hPage, NULL);
-    if (rc != REC_OK) {
+    if (rc != REC_OK &&
+        rc != NO_TXT_WARN) {
         errMsg(rc, errBuff, errSize);
         kRecFreeImg(this->hPage);
         return -1;
