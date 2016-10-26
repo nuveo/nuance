@@ -13,12 +13,12 @@ import "C"
 import (
 	"errors"
 	"fmt"
-	"unsafe"
-	"math/rand"
-	"time"
-	"path"
-	"os"
 	"io/ioutil"
+	"math/rand"
+	"os"
+	"path"
+	"time"
+	"unsafe"
 )
 
 type nuance struct {
@@ -27,7 +27,7 @@ type nuance struct {
 
 var letterRunes = []rune("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ")
 
-func init(){
+func init() {
 	rand.Seed(time.Now().UnixNano())
 }
 
@@ -167,16 +167,16 @@ func randString(n int) string {
 
 func (n *nuance) OCRImgPageToText(imgFile string,
 	nPage int,
-	) (txt string,err error) {
+) (txt string, err error) {
 	randomAux := randString(6)
-	tempDir := path.Join(os.TempDir(),randomAux)
+	tempDir := path.Join(os.TempDir(), randomAux)
 	tempFile := fmt.Sprintf("%s.txt", tempDir)
 	defer func() {
 		os.Remove(tempFile)
 		os.RemoveAll(tempDir)
 	}()
 	err = n.OCRImgToFile(imgFile, tempFile, nPage, tempDir)
-	if err != nil{
+	if err != nil {
 		fmt.Println(err)
 		return "", err
 	}
@@ -189,17 +189,17 @@ func (n *nuance) OCRImgPageToText(imgFile string,
 	return
 }
 
-func (n *nuance) OCRImgToText(imgFile string) (txt string, err error){
+func (n *nuance) OCRImgToText(imgFile string) (txt string, err error) {
 	pages, err := n.CountPages(imgFile)
 	if err != nil {
 		return
 	}
-	for i:=0;i < pages;i++{
+	for i := 0; i < pages; i++ {
 		aux, err := n.OCRImgPageToText(imgFile, i)
-		if err != nil{
+		if err != nil {
 			return
 		}
-		if len(txt) > 0{
+		if len(txt) > 0 {
 			txt += "\f"
 		}
 		txt += aux
