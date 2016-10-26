@@ -40,7 +40,7 @@ public:
                                   char *errBuff,
                                   const int errSize);
 
-    int OCRImgToText(const char *imgFile,
+    int OCRImgToFile(const char *imgFile,
                      const char *outputFile,
                      const int nPage,
                      const char *auxDocumentFile,
