@@ -137,12 +137,12 @@ func TestOCRImgToFile(t *testing.T) {
 		0,
 		"/src/sample.doc")
 	if err != nil {
-		t.Fatal("OCRImgToText failed:", err)
+		t.Fatal("OCRImgToFile failed:", err)
 	}
 
 }
 
-func TestOCRImgToText(t *testing.T) {
+func TestOCRImgPageToText(t *testing.T) {
         oemCode := loadlicenseTxt()
 
         n := New()
@@ -157,7 +157,7 @@ func TestOCRImgToText(t *testing.T) {
                 t.Fatal("Init failed:", err)
         }
 
-        txt, err := n.OCRImgToText("/src/sample.tif", 0)
+        txt, err := n.OCRImgPageToText("/src/sample.tif", 0)
         if err != nil {
                 t.Errorf("Expected no errors, but foud %s", err)
         }
@@ -184,6 +184,6 @@ func TestMultiplePagesOCRImgToFile(t *testing.T) {
 		0,
 		"/src/sample.doc")
 	if err != nil {
-		t.Fatal("OCRImgToText failed:", err)
+		t.Fatal("OCRImgToFile failed:", err)
 	}
 }

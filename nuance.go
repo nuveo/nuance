@@ -165,7 +165,7 @@ func randString(n int) string {
 	return string(b)
 }
 
-func (n *nuance) OCRImgToText(imgFile string,
+func (n *nuance) OCRImgPageToText(imgFile string,
 	nPage int,
 	) (txt string,err error) {
 	randomAux := randString(6)
@@ -187,6 +187,23 @@ func (n *nuance) OCRImgToText(imgFile string,
 	}
 	txt = string(rawTxt)
 	return 	
+}
+
+func (n *nuance) OCRImgToText(imgFile string) (txt string, err error){
+	pages, err := n.CountPages(imgFile)
+	if err != nil {
+		return
+	}
+	for i:=0;i < pages;i++{
+		aux, err := OCRImgPageToText(imgFile, i)
+		if err != nil{
+			return		
+		}
+		if len(txt) > 0{
+			txt += "\f"
+		}
+		txt += aux
+	}
 }
 
 func (n *nuance) SetLanguagePtBr() (err error) {
