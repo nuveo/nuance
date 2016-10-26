@@ -190,6 +190,7 @@ func (n *nuance) OCRImgPageToText(imgFile string,
 }
 
 func (n *nuance) OCRImgToText(imgFile string) (txt string, err error) {
+<<<<<<< HEAD
 	var pages int
 	pages, err = n.CountPages(imgFile)
 	if err != nil {
@@ -198,6 +199,14 @@ func (n *nuance) OCRImgToText(imgFile string) (txt string, err error) {
 	var aux string
 	for i := 0; i < pages; i++ {
 		aux, err = n.OCRImgPageToText(imgFile, i)
+=======
+	pages, err := n.CountPages(imgFile)
+	if err != nil {
+		return
+	}
+	for i := 0; i < pages; i++ {
+		aux, err := n.OCRImgPageToText(imgFile, i)
+>>>>>>> origin/master
 		if err != nil {
 			return
 		}
