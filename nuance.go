@@ -195,7 +195,7 @@ func (n *nuance) OCRImgToText(imgFile string) (txt string, err error){
 		return
 	}
 	for i:=0;i < pages;i++{
-		aux, err := OCRImgPageToText(imgFile, i)
+		aux, err := n.OCRImgPageToText(imgFile, i)
 		if err != nil{
 			return		
 		}
