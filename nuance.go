@@ -11,6 +11,7 @@ package nuance
 import "C"
 
 import (
+	"bytes"
 	"errors"
 	"fmt"
 	"io/ioutil"
@@ -18,6 +19,8 @@ import (
 	"os"
 	"path"
 	"time"
+	"unicode/utf16"
+	"unicode/utf8"
 	"unsafe"
 )
 
@@ -140,16 +143,53 @@ func (n *nuance) OCRImgToFile(imgFile string,
 	auxDocumentFile string) (err error) {
 	errBuff := make([]byte, 1024)
 
+	randomAux := randString(6)
+	tempFile := fmt.Sprintf("%s.%s", outputFile, randomAux)
+
+	defer func() {
+		os.Remove(tempFile)
+	}()
+
 	if C.nuanceOCRImgToFile(
 		unsafe.Pointer(n.nuancePtr),
 		C.CString(imgFile),
-		C.CString(outputFile),
+		C.CString(tempFile),
 		C.int(nPage),
 		C.CString(auxDocumentFile),
 		(*C.char)(unsafe.Pointer(&errBuff[0])),
 		C.int(len(errBuff))) != 0 {
 
 		err = errors.New(string(errBuff))
+		return
+	}
+
+	var iArray []byte
+	iArray, err = ioutil.ReadFile(tempFile)
+	if err != nil {
+		fmt.Println("OCRImgToFile error:", err)
+		return
+	}
+
+	l := len(iArray)
+	if l%2 != 0 {
+		err = errors.New("OCRImgToFile Number of bytes in the file must be multiple of 2")
+		return
+	}
+
+	u16s := make([]uint16, 1)
+	b8buf := make([]byte, 4)
+	oArray := &bytes.Buffer{}
+
+	for i := 0; i < l; i += 2 {
+		u16s[0] = uint16(iArray[i]) + (uint16(iArray[i+1]) << 8)
+		r := utf16.Decode(u16s)
+		n := utf8.EncodeRune(b8buf, r[0])
+		oArray.Write(b8buf[:n])
+	}
+
+	err = ioutil.WriteFile(outputFile, oArray.Bytes(), 0644)
+	if err != nil {
+		fmt.Println("OCRImgToFile error:", err)
 		return
 	}
 
@@ -165,27 +205,27 @@ func randString(n int) string {
 	return string(b)
 }
 
-func (n *nuance) OCRImgPageToText(imgFile string,
-	nPage int,
-) (txt string, err error) {
+func (n *nuance) OCRImgPageToText(imgFile string, nPage int) (txt string, err error) {
 	randomAux := randString(6)
 	tempDir := path.Join(os.TempDir(), randomAux)
 	tempFile := fmt.Sprintf("%s.txt", tempDir)
+
 	defer func() {
 		os.Remove(tempFile)
 		os.RemoveAll(tempDir)
 	}()
 	err = n.OCRImgToFile(imgFile, tempFile, nPage, tempDir)
 	if err != nil {
-		fmt.Println(err)
-		return "", err
+		fmt.Println("OCRImgPageToText error:", err)
+		return
 	}
 	rawTxt, err := ioutil.ReadFile(tempFile)
 	if err != nil {
-		fmt.Println(err)
-		return "", err
+		fmt.Println("OCRImgPageToText error:", err)
+		return
 	}
 	txt = string(rawTxt)
+
 	return
 }
 
@@ -199,6 +239,7 @@ func (n *nuance) OCRImgToText(imgFile string) (txt string, err error) {
 	for i := 0; i < pages; i++ {
 		aux, err = n.OCRImgPageToText(imgFile, i)
 		if err != nil {
+			fmt.Println("OCRImgToText error: ", err)
 			return
 		}
 		if len(txt) > 0 {

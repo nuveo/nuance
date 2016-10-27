@@ -6,6 +6,7 @@ import (
 	"log"
 	"strings"
 	"testing"
+	"unicode/utf8"
 )
 
 // place your OEM code in a plain text file
@@ -229,14 +230,11 @@ func TestCodePage(t *testing.T) {
 		t.Fatal("Init failed:", err)
 	}
 
-	n.SetCodePage("ISO Latin 1")
+	n.SetLanguagePtBr()
+
+	n.SetCodePage("UTF-8")
 	if err != nil {
 		t.Fatal("SetCodePage failed:", err)
-	}
-
-	n.SetOutputFormat("Converters.Text.FormattedTxt")
-	if err != nil {
-		t.Fatal("SetOutputFormat failed:", err)
 	}
 
 	var txt string
@@ -246,4 +244,7 @@ func TestCodePage(t *testing.T) {
 	}
 
 	fmt.Println("TestCodePage:", txt)
+
+	log.Printf("String is valid? %v", utf8.ValidString(txt))
+
 }
