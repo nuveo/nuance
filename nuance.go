@@ -243,3 +243,37 @@ func (n *nuance) CountPages(imgFile string) (nPage int, err error) {
 	err = nil
 	return
 }
+
+func (n *nuance) SetCodePage(codePage string) (err error) {
+	errBuff := make([]byte, 1024)
+
+	if C.nuanceSetCodePage(
+		unsafe.Pointer(n.nuancePtr),
+		C.CString(codePage),
+		(*C.char)(unsafe.Pointer(&errBuff[0])),
+		C.int(len(errBuff))) != 0 {
+
+		err = errors.New(string(errBuff))
+		return
+	}
+
+	err = nil
+	return
+}
+
+func (n *nuance) SetOutputFormat(outputFormat string) (err error) {
+	errBuff := make([]byte, 1024)
+
+	if C.nuanceSetOutputFormat(
+		unsafe.Pointer(n.nuancePtr),
+		C.CString(outputFormat),
+		(*C.char)(unsafe.Pointer(&errBuff[0])),
+		C.int(len(errBuff))) != 0 {
+
+		err = errors.New(string(errBuff))
+		return
+	}
+
+	err = nil
+	return
+}

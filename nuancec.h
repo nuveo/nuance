@@ -2,6 +2,8 @@
 #define __NUANCEC_H__
 
 #define ERR_BUFFER_SIZE 1024
+#define CODEPAGE_BUFFER_SIZE 254
+#define OUTPUTFMT_BUFFER_SIZE 254
 
 #ifdef __cplusplus
 extern "C" {
@@ -69,6 +71,17 @@ int nuanceCountPages(nuancePtr n,
                      int *nPages,
                      char *errBuff,
                      const int errSize);
+
+int nuanceSetCodePage(nuancePtr n,
+                      const char *codePage,
+                      char *errBuff,
+                      const int errSize);
+
+int nuanceSetOutputFormat(nuancePtr n,
+                          const char *outputFormat,
+                          char *errBuff,
+                          const int errSize);
+
 
 #ifdef __cplusplus
 }

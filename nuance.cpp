@@ -1,7 +1,14 @@
 #include "nuance.hpp"
 #include "nuancec.h"
 
+char cCodePage[CODEPAGE_BUFFER_SIZE];
+char cOutputFormat[OUTPUTFMT_BUFFER_SIZE];
+
 nuance::nuance(void) {
+    memset(cCodePage, 0, CODEPAGE_BUFFER_SIZE);
+    memset(cOutputFormat, 0, OUTPUTFMT_BUFFER_SIZE);
+    strncpy(cCodePage, "UTF-8", CODEPAGE_BUFFER_SIZE);
+    strncpy(cOutputFormat, "Converters.Text.UFormattedTxt", OUTPUTFMT_BUFFER_SIZE);
 }
 
 nuance::~nuance(void) {
@@ -255,14 +262,16 @@ int nuance::OCRImgToFile(const char *imgFile,
         return -1;
     }
 
-    rc = kRecSetCodePage(0, "UTF-8");
+    //printf("CodePage %s\n", cCodePage);
+    rc = kRecSetCodePage(0, cCodePage);
     if (rc != REC_OK) {
         errMsg(rc, errBuff, errSize);
         kRecFreeImg(this->hPage);
         return -1;
     }
 
-    rc = RecSetOutputFormat(0, "Converters.Text.UFormattedTxt");
+    //printf("OutputFormat %s\n", cOutputFormat);
+    rc = RecSetOutputFormat(0, cOutputFormat);
     if (rc != REC_OK) {
         errMsg(rc, errBuff, errSize);
         kRecFreeImg(this->hPage);
@@ -352,5 +361,37 @@ int nuance::CountPages(const char *imgFile,
     }
 
     kRecCloseImgFile(hIFile);
+    return 0;
+}
+
+int nuance::SetCodePage(const char *codePage,
+                       char *errBuff,
+                       const int errSize) {
+    RECERR rc;
+
+    rc = kRecSetCodePage(0, codePage);
+    if (rc != REC_OK) {
+        errMsg(rc, errBuff, errSize);
+        kRecFreeImg(this->hPage);
+        return -1;
+    }
+
+    strncpy(cCodePage, codePage, CODEPAGE_BUFFER_SIZE);
+    return 0;
+}
+
+int nuance::SetOutputFormat(const char *outputFormat,
+                            char *errBuff,
+                            const int errSize) {
+    RECERR rc;
+
+    rc = RecSetOutputFormat(0, outputFormat);
+    if (rc != REC_OK) {
+        errMsg(rc, errBuff, errSize);
+        kRecFreeImg(this->hPage);
+        return -1;
+    }
+
+    strncpy(cOutputFormat, outputFormat, OUTPUTFMT_BUFFER_SIZE);
     return 0;
 }

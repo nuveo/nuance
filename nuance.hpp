@@ -64,6 +64,14 @@ public:
                    char *errBuff,
                    const int errSize);
 
+    int SetCodePage(const char *codePage,
+                    char *errBuff,
+                    const int errSize);
+
+    int SetOutputFormat(const char *outputFormat,
+                        char *errBuff,
+                        const int errSize);
+
     void Quit(void);
 };
 

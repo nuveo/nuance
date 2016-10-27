@@ -129,3 +129,25 @@ int nuanceCountPages(nuancePtr n,
                            errBuff,
                            errSize);
 }
+
+int nuanceSetCodePage(nuancePtr n,
+                      const char *codePage,
+                      char *errBuff,
+                      const int errSize) {
+
+    nuance *ptr = (nuance*)n;
+    return ptr->SetCodePage(codePage,
+                            errBuff,
+                            errSize);
+}
+
+int nuanceSetOutputFormat(nuancePtr n,
+                          const char *outputFormat,
+                          char *errBuff,
+                          const int errSize) {
+
+    nuance *ptr = (nuance*)n;
+    return ptr->SetOutputFormat(outputFormat,
+                                errBuff,
+                                errSize);
+}

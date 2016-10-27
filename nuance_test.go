@@ -213,3 +213,37 @@ func TestOCRImgToText(t *testing.T) {
 
 	fmt.Println("TestOCRImgToText:", txt)
 }
+
+func TestCodePage(t *testing.T) {
+	oemCode := loadlicenseTxt()
+
+	n := New()
+
+	err := n.SetLicense(oemLicenseFile, oemCode)
+	if err != nil {
+		t.Fatal("SetLicense failed:", err)
+	}
+
+	err = n.Init("YOUR_COMPANY", "YOUR_PRODUCT")
+	if err != nil {
+		t.Fatal("Init failed:", err)
+	}
+
+	n.SetCodePage("ISO Latin 1")
+	if err != nil {
+		t.Fatal("SetCodePage failed:", err)
+	}
+
+	n.SetOutputFormat("Converters.Text.FormattedTxt")
+	if err != nil {
+		t.Fatal("SetOutputFormat failed:", err)
+	}
+
+	var txt string
+	txt, err = n.OCRImgToText("/src/sample.tif")
+	if err != nil {
+		t.Fatal("TestCodePage failed:", err)
+	}
+
+	fmt.Println("TestCodePage:", txt)
+}
