@@ -16,13 +16,13 @@ addons:
       - xmlsec1
 before_install:
   - go get github.com/tools/godep
-  - go get ./...
   - wget https://dl.dropboxusercontent.com/u/763381/nuveo/mirror/nuance/gpg-pubkey-nuance-lnx1.asc
   - wget https://dl.dropboxusercontent.com/u/763381/nuveo/mirror/nuance/nuance-omnipage-csdk-devel_19.2-15521.100_amd64.deb
   - wget https://dl.dropboxusercontent.com/u/763381/nuveo/mirror/nuance/nuance-omnipage-csdk-lib64_19.2-15521.100_amd64.deb
   - gpg --import gpg-pubkey-nuance-lnx1.asc
   - dpkg -i nuance-omnipage-csdk-lib64_19.2-15521.100_amd64.deb
   - dpkg -i nuance-omnipage-csdk-devel_19.2-15521.100_amd64.deb
+  - go get ./...
 script: go test
 notifications:
   email:
