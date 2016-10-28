@@ -185,7 +185,7 @@ int nuance::PreprocessImgWithTemplate(const char *imgFile,
 
     // Recognize fill zones
     rc = kRecRecognize(0, this->hPage, NULL);
-    if (rc != REC_OK) {
+    if (rc != REC_OK && rc != ZONE_NOTFOUND_WARN) {
         errMsg(rc, errBuff, errSize);
         kRecFreeImg(this->hPage);
         kRecQuit();
@@ -194,6 +194,14 @@ int nuance::PreprocessImgWithTemplate(const char *imgFile,
 
     // Get zone content
     rc = kRecGetOCRZoneCount(this->hPage, &this->ZoneCount);
+    if (rc != REC_OK) {
+        errMsg(rc, errBuff, errSize);
+        kRecFreeImg(this->hPage);
+        kRecQuit();
+        return -1;
+    }
+
+    printf("kRecGetOCRZoneCount: %i\n", this->ZoneCount);
 
     return 0;
 }
