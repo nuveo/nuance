@@ -1,5 +1,5 @@
 # Nuance SDK in Go
-[![GoDoc](https://godoc.org/github.com/nuveo/nuance?status.png)](https://godoc.org/github.com/nuveo/nuance)
+[![GoDoc](https://godoc.org/github.com/nuveo/nuance?status.png)](https://godoc.org/github.com/nuveo/nuance) [![Go Report Card](https://goreportcard.com/badge/github.com/nuveo/nuance)](https://goreportcard.com/report/github.com/nuveo/nuance)
 
 This is a wrapper for the OCR libraries provided by Nuance in their SDK.
 
