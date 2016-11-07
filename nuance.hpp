@@ -40,12 +40,19 @@ public:
                                   char *errBuff,
                                   const int errSize);
 
-    int OCRImgToFile(const char *imgFile,
+    int OCRImgToTextFile(const char *imgFile,
                      const char *outputFile,
                      const int nPage,
                      const char *auxDocumentFile,
                      char *errBuff,
                      const int errSize);
+
+    int OCRImgToFile(const char *imgFile,
+        const char *outputFile,
+        const int nPage,
+        const char *auxDocumentFile,
+        char *errBuff,
+        const int errSize);
 
     int getZoneCount(void);
 

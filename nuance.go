@@ -143,6 +143,27 @@ func (n *nuance) OCRImgToFile(imgFile string,
 	auxDocumentFile string) (err error) {
 	errBuff := make([]byte, 1024)
 
+	if C.nuanceOCRImgToFile(
+		unsafe.Pointer(n.nuancePtr),
+		C.CString(imgFile),
+		C.CString(outputFile),
+		C.int(nPage),
+		C.CString(auxDocumentFile),
+		(*C.char)(unsafe.Pointer(&errBuff[0])),
+		C.int(len(errBuff))) != 0 {
+
+		err = errors.New(string(errBuff))
+		return
+	}
+	return
+}
+
+func (n *nuance) OCRImgToTextFile(imgFile string,
+	outputFile string,
+	nPage int,
+	auxDocumentFile string) (err error) {
+	errBuff := make([]byte, 1024)
+
 	randomAux := randString(6)
 	tempFile := fmt.Sprintf("%s.%s", outputFile, randomAux)
 
@@ -150,7 +171,7 @@ func (n *nuance) OCRImgToFile(imgFile string,
 		os.Remove(tempFile)
 	}()
 
-	if C.nuanceOCRImgToFile(
+	if C.nuanceOCRImgToTextFile(
 		unsafe.Pointer(n.nuancePtr),
 		C.CString(imgFile),
 		C.CString(tempFile),
@@ -166,13 +187,13 @@ func (n *nuance) OCRImgToFile(imgFile string,
 	var iArray []byte
 	iArray, err = ioutil.ReadFile(tempFile)
 	if err != nil {
-		fmt.Println("OCRImgToFile error:", err)
+		fmt.Println("OCRImgToTextFile error:", err)
 		return
 	}
 
 	l := len(iArray)
 	if l%2 != 0 {
-		err = errors.New("OCRImgToFile Number of bytes in the file must be multiple of 2")
+		err = errors.New("OCRImgToTextFile Number of bytes in the file must be multiple of 2")
 		return
 	}
 
@@ -189,7 +210,7 @@ func (n *nuance) OCRImgToFile(imgFile string,
 
 	err = ioutil.WriteFile(outputFile, oArray.Bytes(), 0644)
 	if err != nil {
-		fmt.Println("OCRImgToFile error:", err)
+		fmt.Println("OCRImgToTextFile error:", err)
 		return
 	}
 
@@ -214,7 +235,7 @@ func (n *nuance) OCRImgPageToText(imgFile string, nPage int) (txt string, err er
 		os.Remove(tempFile)
 		os.RemoveAll(tempDir)
 	}()
-	err = n.OCRImgToFile(imgFile, tempFile, nPage, tempDir)
+	err = n.OCRImgToTextFile(imgFile, tempFile, nPage, tempDir)
 	if err != nil {
 		fmt.Println("OCRImgPageToText error:", err)
 		return

@@ -133,12 +133,42 @@ func TestOCRImgToFile(t *testing.T) {
 		t.Fatal("Init failed:", err)
 	}
 
+	err = n.SetOutputFormat("Converters.Text.UTextWithLinebreaks")
+	if err != nil {
+		t.Fatal("SetOutputFormat failed:", err)
+	}
+
 	err = n.OCRImgToFile("/src/sample.tif",
-		"/src/sample.txt",
+		"/src/sampleUTextWithLinebreaks.txt",
 		0,
 		"/src/sample.doc")
 	if err != nil {
 		t.Fatal("OCRImgToFile failed:", err)
+	}
+
+}
+
+func TestOCRImgToTextFile(t *testing.T) {
+	oemCode := loadlicenseTxt()
+
+	n := New()
+
+	err := n.SetLicense(oemLicenseFile, oemCode)
+	if err != nil {
+		t.Fatal("SetLicense failed:", err)
+	}
+
+	err = n.Init("YOUR_COMPANY", "YOUR_PRODUCT")
+	if err != nil {
+		t.Fatal("Init failed:", err)
+	}
+
+	err = n.OCRImgToTextFile("/src/sample.tif",
+		"/src/sample.txt",
+		0,
+		"/src/sample.doc")
+	if err != nil {
+		t.Fatal("OCRImgToTextFile failed:", err)
 	}
 
 }
@@ -167,7 +197,7 @@ func TestOCRImgPageToText(t *testing.T) {
 
 }
 
-func TestMultiplePagesOCRImgToFile(t *testing.T) {
+func TestMultiplePagesOCRImgToTextFile(t *testing.T) {
 	oemCode := loadlicenseTxt()
 
 	n := New()
@@ -182,12 +212,12 @@ func TestMultiplePagesOCRImgToFile(t *testing.T) {
 		t.Fatal("Init failed:", err)
 	}
 
-	err = n.OCRImgToFile("/src/sample.tif",
+	err = n.OCRImgToTextFile("/src/sample.tif",
 		"/src/sample.txt",
 		0,
 		"/src/sample.doc")
 	if err != nil {
-		t.Fatal("OCRImgToFile failed:", err)
+		t.Fatal("OCRImgToTextFile failed:", err)
 	}
 }
 
@@ -209,7 +239,7 @@ func TestOCRImgToText(t *testing.T) {
 	var txt string
 	txt, err = n.OCRImgToText("/src/sample.tif")
 	if err != nil {
-		t.Fatal("OCRImgToFile failed:", err)
+		t.Fatal("OCRImgToText failed:", err)
 	}
 
 	fmt.Println("TestOCRImgToText:", txt)

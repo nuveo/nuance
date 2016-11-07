@@ -55,6 +55,14 @@ int nuanceGetZoneData(nuancePtr n,
 void nuanceFreeImgWithTemplate(nuancePtr n);
 
 int nuanceOCRImgToFile(nuancePtr n,
+    const char *imgFile,
+    const char *outputFile,
+    const int nPage,
+    const char *auxDocumentFile,
+    char *errBuff,
+    const int errSize);
+
+int nuanceOCRImgToTextFile(nuancePtr n,
                        const char *imgFile,
                        const char *outputFile,
                        const int nPage,

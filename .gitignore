@@ -43,3 +43,5 @@ aux/*
 
 nuanceTemp_test.go
 sample.png
+
+sampleUTextWithLinebreaks.txt

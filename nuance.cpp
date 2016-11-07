@@ -325,6 +325,82 @@ int nuance::OCRImgToFile(const char *imgFile,
     return 0;
 }
 
+int nuance::OCRImgToTextFile(const char *imgFile,
+                         const char *outputFile,
+                         const int nPage,
+                         const char *auxDocumentFile,
+                         char *errBuff,
+                         const int errSize) {
+
+    RECERR      rc;
+
+    rc = kRecLoadImgF(0, imgFile, &this->hPage, nPage);
+    if (rc != REC_OK &&
+        rc != IMG_DPI_WARN) {
+        errMsg(rc, errBuff, errSize);
+        return -1;
+    }
+
+    rc = RecSetOutputLevel(0, OL_TRUEPAGE);
+    if (rc != REC_OK) {
+        errMsg(rc, errBuff, errSize);
+        kRecFreeImg(this->hPage);
+        return -1;
+    }
+
+    rc = kRecSetCodePage(0, cCodePage);
+    if (rc != REC_OK) {
+        errMsg(rc, errBuff, errSize);
+        kRecFreeImg(this->hPage);
+        return -1;
+    }
+
+    rc = RecSetOutputFormat(0, "Converters.Text.UFormattedTxt");
+    if (rc != REC_OK) {
+        errMsg(rc, errBuff, errSize);
+        kRecFreeImg(this->hPage);
+        return -1;
+    }
+
+    rc = kRecRecognize(0, this->hPage, NULL);
+    if (rc != REC_OK &&
+        rc != NO_TXT_WARN) {
+        errMsg(rc, errBuff, errSize);
+        kRecFreeImg(this->hPage);
+        return -1;
+    }
+
+    HDOC hDoc;
+    rc = RecCreateDoc(0, auxDocumentFile, &hDoc, DOC_NORMAL);
+    if (rc != REC_OK) {
+        errMsg(rc, errBuff, errSize);
+        kRecFreeImg(this->hPage);
+        return -1;
+    }
+
+    rc = RecInsertPage(0, hDoc, this->hPage, nPage);
+    if (rc != REC_OK) {
+        errMsg(rc, errBuff, errSize);
+        RecCloseDoc(0, hDoc);
+        return -1;
+    }
+
+    rc = RecConvert2Doc(0, hDoc, outputFile);
+    if (rc != REC_OK) {
+        errMsg(rc, errBuff, errSize);
+        RecCloseDoc(0, hDoc);
+        return -1;
+    }
+
+    rc = RecCloseDoc(0, hDoc);
+    if (rc != REC_OK) {
+        errMsg(rc, errBuff, errSize);
+        return -1;
+    }
+
+    return 0;
+}
+
 // TODO: find a more generic way to set the language, without using "define" in the Golang side.
 int nuance::SetLanguagePtBr(char *errBuff, const int errSize) {
     RECERR      rc;
