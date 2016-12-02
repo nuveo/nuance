@@ -1,4 +1,4 @@
-package nuance
+package omnipage
 
 /*
 #cgo CPPFLAGS: -I /usr/local/include/nuance-omnipage-csdk-19.2
@@ -34,15 +34,18 @@ func init() {
 	rand.Seed(time.Now().UnixNano())
 }
 
+// New create nuance session
 func New() (n nuance) {
 	n.nuancePtr = C.nuanceNew()
 	return
 }
 
+// Free allocated resources
 func (n *nuance) Free() {
 	C.nuanceFree(unsafe.Pointer(n.nuancePtr))
 }
 
+// Init a nuance session.
 func (n *nuance) Init(company string, product string) (err error) {
 	errBuff := make([]byte, 1024)
 	if C.nuanceInit(
@@ -60,6 +63,10 @@ func (n *nuance) Init(company string, product string) (err error) {
 	return
 }
 
+/*
+SetLicense uses license file and OEM code to activate nuance library.
+It should be called immediately after instantiating a new session with the New () function.
+*/
 func (n *nuance) SetLicense(licenseFile string, oemCode string) (err error) {
 	errBuff := make([]byte, 1024)
 
@@ -78,6 +85,11 @@ func (n *nuance) SetLicense(licenseFile string, oemCode string) (err error) {
 	return
 }
 
+/*
+Quit Nuance.
+At this point of development it is also necessary to use the
+Free() function to release the resources.
+*/
 func (n *nuance) Quit() {
 	C.nuanceQuit(unsafe.Pointer(n.nuancePtr))
 }

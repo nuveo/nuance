@@ -1,4 +1,4 @@
-package nuance
+package omnipage
 
 import (
 	"fmt"

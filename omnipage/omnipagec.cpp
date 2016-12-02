@@ -1,5 +1,5 @@
-#include "nuance.hpp"
-#include "nuancec.h"
+#include "omnipage.hpp"
+#include "omnipage.h"
 
 nuancePtr nuanceNew(void) {
     nuance *n = new nuance();

@@ -1,5 +1,5 @@
-#include "nuance.hpp"
-#include "nuancec.h"
+#include "omnipage.hpp"
+#include "omnipage.h"
 
 char cCodePage[CODEPAGE_BUFFER_SIZE];
 char cOutputFormat[OUTPUTFMT_BUFFER_SIZE];

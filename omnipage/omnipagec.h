@@ -1,5 +1,5 @@
-#ifndef __NUANCEC_H__
-#define __NUANCEC_H__
+#ifndef __OMNIPAGEC_H__
+#define __OMNIPAGEC_H__
 
 #define ERR_BUFFER_SIZE 1024
 #define CODEPAGE_BUFFER_SIZE 254

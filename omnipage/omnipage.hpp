@@ -1,5 +1,5 @@
-#ifndef __NUANCE_HPP__
-#define __NUANCE_HPP__
+#ifndef __OMNIPAGE_HPP__
+#define __OMNIPAGE_HPP__
 
 #include <cstdio>
 #include <cstring>
