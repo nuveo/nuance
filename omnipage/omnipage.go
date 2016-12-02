@@ -6,7 +6,7 @@ package omnipage
 
 #include <KernelApi.h>
 
-#include "nuancec.h"
+#include "omnipagec.h"
 */
 import "C"
 
@@ -24,8 +24,8 @@ import (
 	"unsafe"
 )
 
-type nuance struct {
-	nuancePtr C.nuancePtr
+type omnipage struct {
+	omnipagePtr C.omnipagePtr
 }
 
 var letterRunes = []rune("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ")
@@ -34,22 +34,22 @@ func init() {
 	rand.Seed(time.Now().UnixNano())
 }
 
-// New create nuance session
-func New() (n nuance) {
-	n.nuancePtr = C.nuanceNew()
+// New create omnipage session
+func New() (n omnipage) {
+	n.omnipagePtr = C.omnipageNew()
 	return
 }
 
 // Free allocated resources
-func (n *nuance) Free() {
-	C.nuanceFree(unsafe.Pointer(n.nuancePtr))
+func (n *omnipage) Free() {
+	C.omnipageFree(unsafe.Pointer(n.omnipagePtr))
 }
 
-// Init a nuance session.
-func (n *nuance) Init(company string, product string) (err error) {
+// Init a omnipage session.
+func (n *omnipage) Init(company string, product string) (err error) {
 	errBuff := make([]byte, 1024)
-	if C.nuanceInit(
-		unsafe.Pointer(n.nuancePtr),
+	if C.omnipageInit(
+		unsafe.Pointer(n.omnipagePtr),
 		C.CString(company),
 		C.CString(product),
 		(*C.char)(unsafe.Pointer(&errBuff[0])),
@@ -64,14 +64,14 @@ func (n *nuance) Init(company string, product string) (err error) {
 }
 
 /*
-SetLicense uses license file and OEM code to activate nuance library.
+SetLicense uses license file and OEM code to activate omnipage library.
 It should be called immediately after instantiating a new session with the New () function.
 */
-func (n *nuance) SetLicense(licenseFile string, oemCode string) (err error) {
+func (n *omnipage) SetLicense(licenseFile string, oemCode string) (err error) {
 	errBuff := make([]byte, 1024)
 
-	if C.nuanceSetLicense(
-		unsafe.Pointer(n.nuancePtr),
+	if C.omnipageSetLicense(
+		unsafe.Pointer(n.omnipagePtr),
 		C.CString(licenseFile),
 		C.CString(oemCode),
 		(*C.char)(unsafe.Pointer(&errBuff[0])),
@@ -86,18 +86,18 @@ func (n *nuance) SetLicense(licenseFile string, oemCode string) (err error) {
 }
 
 /*
-Quit Nuance.
+Quit omnipage.
 At this point of development it is also necessary to use the
 Free() function to release the resources.
 */
-func (n *nuance) Quit() {
-	C.nuanceQuit(unsafe.Pointer(n.nuancePtr))
+func (n *omnipage) Quit() {
+	C.omnipageQuit(unsafe.Pointer(n.omnipagePtr))
 }
 
-func (n *nuance) LoadFormTemplateLibrary(templateFile string) (err error) {
+func (n *omnipage) LoadFormTemplateLibrary(templateFile string) (err error) {
 	errBuff := make([]byte, 1024)
-	if C.nuanceLoadFormTemplateLibrary(
-		unsafe.Pointer(n.nuancePtr),
+	if C.omnipageLoadFormTemplateLibrary(
+		unsafe.Pointer(n.omnipagePtr),
 		C.CString(templateFile),
 		(*C.char)(unsafe.Pointer(&errBuff[0])),
 		C.int(len(errBuff))) != 0 {
@@ -110,12 +110,12 @@ func (n *nuance) LoadFormTemplateLibrary(templateFile string) (err error) {
 	return
 }
 
-func (n *nuance) OCRImgWithTemplate(imgFile string) (ret map[string]string, err error) {
+func (n *omnipage) OCRImgWithTemplate(imgFile string) (ret map[string]string, err error) {
 	errBuff := make([]byte, 1024)
 	ret = make(map[string]string)
 
-	if C.nuancePreprocessImgWithTemplate(
-		unsafe.Pointer(n.nuancePtr),
+	if C.omnipagePreprocessImgWithTemplate(
+		unsafe.Pointer(n.omnipagePtr),
 		C.CString(imgFile),
 		(*C.char)(unsafe.Pointer(&errBuff[0])),
 		C.int(len(errBuff))) != 0 {
@@ -124,7 +124,7 @@ func (n *nuance) OCRImgWithTemplate(imgFile string) (ret map[string]string, err 
 		return
 	}
 
-	zoneCount := int(C.nuanceGetZoneCount(unsafe.Pointer(n.nuancePtr)))
+	zoneCount := int(C.omnipageGetZoneCount(unsafe.Pointer(n.omnipagePtr)))
 
 	fmt.Println("zoneCount:", zoneCount)
 
@@ -132,8 +132,8 @@ func (n *nuance) OCRImgWithTemplate(imgFile string) (ret map[string]string, err 
 		zoneName := make([]byte, 256)
 		zoneText := make([]byte, 256)
 
-		C.nuanceGetZoneData(
-			unsafe.Pointer(n.nuancePtr),
+		C.omnipageGetZoneData(
+			unsafe.Pointer(n.omnipagePtr),
 			C.int(i),
 			(*C.char)(unsafe.Pointer(&zoneName[0])),
 			C.int(256),
@@ -144,19 +144,19 @@ func (n *nuance) OCRImgWithTemplate(imgFile string) (ret map[string]string, err 
 		//fmt.Printf("%s: [%s]\n", string(zoneName), string(zoneText))
 	}
 
-	C.nuanceFreeImgWithTemplate(unsafe.Pointer(n.nuancePtr))
+	C.omnipageFreeImgWithTemplate(unsafe.Pointer(n.omnipagePtr))
 	err = nil
 	return
 }
 
-func (n *nuance) OCRImgToFile(imgFile string,
+func (n *omnipage) OCRImgToFile(imgFile string,
 	outputFile string,
 	nPage int,
 	auxDocumentFile string) (err error) {
 	errBuff := make([]byte, 1024)
 
-	if C.nuanceOCRImgToFile(
-		unsafe.Pointer(n.nuancePtr),
+	if C.omnipageOCRImgToFile(
+		unsafe.Pointer(n.omnipagePtr),
 		C.CString(imgFile),
 		C.CString(outputFile),
 		C.int(nPage),
@@ -170,7 +170,7 @@ func (n *nuance) OCRImgToFile(imgFile string,
 	return
 }
 
-func (n *nuance) OCRImgToTextFile(imgFile string,
+func (n *omnipage) OCRImgToTextFile(imgFile string,
 	outputFile string,
 	nPage int,
 	auxDocumentFile string) (err error) {
@@ -183,8 +183,8 @@ func (n *nuance) OCRImgToTextFile(imgFile string,
 		os.Remove(tempFile)
 	}()
 
-	if C.nuanceOCRImgToTextFile(
-		unsafe.Pointer(n.nuancePtr),
+	if C.omnipageOCRImgToTextFile(
+		unsafe.Pointer(n.omnipagePtr),
 		C.CString(imgFile),
 		C.CString(tempFile),
 		C.int(nPage),
@@ -238,7 +238,7 @@ func randString(n int) string {
 	return string(b)
 }
 
-func (n *nuance) OCRImgPageToText(imgFile string, nPage int) (txt string, err error) {
+func (n *omnipage) OCRImgPageToText(imgFile string, nPage int) (txt string, err error) {
 	randomAux := randString(6)
 	tempDir := path.Join(os.TempDir(), randomAux)
 	tempFile := fmt.Sprintf("%s.txt", tempDir)
@@ -262,7 +262,7 @@ func (n *nuance) OCRImgPageToText(imgFile string, nPage int) (txt string, err er
 	return
 }
 
-func (n *nuance) OCRImgToText(imgFile string) (txt string, err error) {
+func (n *omnipage) OCRImgToText(imgFile string) (txt string, err error) {
 	var pages int
 	pages, err = n.CountPages(imgFile)
 	if err != nil {
@@ -283,11 +283,11 @@ func (n *nuance) OCRImgToText(imgFile string) (txt string, err error) {
 	return
 }
 
-func (n *nuance) SetLanguagePtBr() (err error) {
+func (n *omnipage) SetLanguagePtBr() (err error) {
 	errBuff := make([]byte, 1024)
 
-	if C.nuanceSetLanguagePtBr(
-		unsafe.Pointer(n.nuancePtr),
+	if C.omnipageSetLanguagePtBr(
+		unsafe.Pointer(n.omnipagePtr),
 		(*C.char)(unsafe.Pointer(&errBuff[0])),
 		C.int(len(errBuff))) != 0 {
 
@@ -299,12 +299,12 @@ func (n *nuance) SetLanguagePtBr() (err error) {
 	return
 }
 
-func (n *nuance) CountPages(imgFile string) (nPage int, err error) {
+func (n *omnipage) CountPages(imgFile string) (nPage int, err error) {
 	errBuff := make([]byte, 1024)
 	nPage = 0
 
-	if C.nuanceCountPages(
-		unsafe.Pointer(n.nuancePtr),
+	if C.omnipageCountPages(
+		unsafe.Pointer(n.omnipagePtr),
 		C.CString(imgFile),
 		(*C.int)(unsafe.Pointer(&nPage)),
 		(*C.char)(unsafe.Pointer(&errBuff[0])),
@@ -318,11 +318,11 @@ func (n *nuance) CountPages(imgFile string) (nPage int, err error) {
 	return
 }
 
-func (n *nuance) SetCodePage(codePage string) (err error) {
+func (n *omnipage) SetCodePage(codePage string) (err error) {
 	errBuff := make([]byte, 1024)
 
-	if C.nuanceSetCodePage(
-		unsafe.Pointer(n.nuancePtr),
+	if C.omnipageSetCodePage(
+		unsafe.Pointer(n.omnipagePtr),
 		C.CString(codePage),
 		(*C.char)(unsafe.Pointer(&errBuff[0])),
 		C.int(len(errBuff))) != 0 {
@@ -335,11 +335,11 @@ func (n *nuance) SetCodePage(codePage string) (err error) {
 	return
 }
 
-func (n *nuance) SetOutputFormat(outputFormat string) (err error) {
+func (n *omnipage) SetOutputFormat(outputFormat string) (err error) {
 	errBuff := make([]byte, 1024)
 
-	if C.nuanceSetOutputFormat(
-		unsafe.Pointer(n.nuancePtr),
+	if C.omnipageSetOutputFormat(
+		unsafe.Pointer(n.omnipagePtr),
 		C.CString(outputFormat),
 		(*C.char)(unsafe.Pointer(&errBuff[0])),
 		C.int(len(errBuff))) != 0 {
