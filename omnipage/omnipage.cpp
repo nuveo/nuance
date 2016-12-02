@@ -1,5 +1,5 @@
 #include "omnipage.hpp"
-#include "omnipage.h"
+#include "omnipagec.h"
 
 char cCodePage[CODEPAGE_BUFFER_SIZE];
 char cOutputFormat[OUTPUTFMT_BUFFER_SIZE];

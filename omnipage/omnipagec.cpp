@@ -1,5 +1,5 @@
 #include "omnipage.hpp"
-#include "omnipage.h"
+#include "omnipagec.h"
 
 omnipagePtr omnipageNew(void) {
     omnipage *n = new omnipage();
