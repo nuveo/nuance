@@ -24,7 +24,7 @@ import (
 	"unsafe"
 )
 
-type omnipage struct {
+type Omnipage struct {
 	omnipagePtr C.omnipagePtr
 }
 
@@ -35,18 +35,18 @@ func init() {
 }
 
 // New create omnipage session
-func New() (n omnipage) {
+func New() (n Omnipage) {
 	n.omnipagePtr = C.omnipageNew()
 	return
 }
 
 // Free allocated resources
-func (n *omnipage) Free() {
+func (n *Omnipage) Free() {
 	C.omnipageFree(unsafe.Pointer(n.omnipagePtr))
 }
 
 // Init a omnipage session.
-func (n *omnipage) Init(company string, product string) (err error) {
+func (n *Omnipage) Init(company string, product string) (err error) {
 	errBuff := make([]byte, 1024)
 	if C.omnipageInit(
 		unsafe.Pointer(n.omnipagePtr),
@@ -67,7 +67,7 @@ func (n *omnipage) Init(company string, product string) (err error) {
 SetLicense uses license file and OEM code to activate omnipage library.
 It should be called immediately after instantiating a new session with the New () function.
 */
-func (n *omnipage) SetLicense(licenseFile string, oemCode string) (err error) {
+func (n *Omnipage) SetLicense(licenseFile string, oemCode string) (err error) {
 	errBuff := make([]byte, 1024)
 
 	if C.omnipageSetLicense(
@@ -90,11 +90,11 @@ Quit omnipage.
 At this point of development it is also necessary to use the
 Free() function to release the resources.
 */
-func (n *omnipage) Quit() {
+func (n *Omnipage) Quit() {
 	C.omnipageQuit(unsafe.Pointer(n.omnipagePtr))
 }
 
-func (n *omnipage) LoadFormTemplateLibrary(templateFile string) (err error) {
+func (n *Omnipage) LoadFormTemplateLibrary(templateFile string) (err error) {
 	errBuff := make([]byte, 1024)
 	if C.omnipageLoadFormTemplateLibrary(
 		unsafe.Pointer(n.omnipagePtr),
@@ -110,7 +110,7 @@ func (n *omnipage) LoadFormTemplateLibrary(templateFile string) (err error) {
 	return
 }
 
-func (n *omnipage) OCRImgWithTemplate(imgFile string) (ret map[string]string, err error) {
+func (n *Omnipage) OCRImgWithTemplate(imgFile string) (ret map[string]string, err error) {
 	errBuff := make([]byte, 1024)
 	ret = make(map[string]string)
 
@@ -149,7 +149,7 @@ func (n *omnipage) OCRImgWithTemplate(imgFile string) (ret map[string]string, er
 	return
 }
 
-func (n *omnipage) OCRImgToFile(imgFile string,
+func (n *Omnipage) OCRImgToFile(imgFile string,
 	outputFile string,
 	nPage int,
 	auxDocumentFile string) (err error) {
@@ -170,7 +170,7 @@ func (n *omnipage) OCRImgToFile(imgFile string,
 	return
 }
 
-func (n *omnipage) OCRImgToTextFile(imgFile string,
+func (n *Omnipage) OCRImgToTextFile(imgFile string,
 	outputFile string,
 	nPage int,
 	auxDocumentFile string) (err error) {
@@ -238,7 +238,7 @@ func randString(n int) string {
 	return string(b)
 }
 
-func (n *omnipage) OCRImgPageToText(imgFile string, nPage int) (txt string, err error) {
+func (n *Omnipage) OCRImgPageToText(imgFile string, nPage int) (txt string, err error) {
 	randomAux := randString(6)
 	tempDir := path.Join(os.TempDir(), randomAux)
 	tempFile := fmt.Sprintf("%s.txt", tempDir)
@@ -262,7 +262,7 @@ func (n *omnipage) OCRImgPageToText(imgFile string, nPage int) (txt string, err 
 	return
 }
 
-func (n *omnipage) OCRImgToText(imgFile string) (txt string, err error) {
+func (n *Omnipage) OCRImgToText(imgFile string) (txt string, err error) {
 	var pages int
 	pages, err = n.CountPages(imgFile)
 	if err != nil {
@@ -283,7 +283,7 @@ func (n *omnipage) OCRImgToText(imgFile string) (txt string, err error) {
 	return
 }
 
-func (n *omnipage) SetLanguagePtBr() (err error) {
+func (n *Omnipage) SetLanguagePtBr() (err error) {
 	errBuff := make([]byte, 1024)
 
 	if C.omnipageSetLanguagePtBr(
@@ -299,7 +299,7 @@ func (n *omnipage) SetLanguagePtBr() (err error) {
 	return
 }
 
-func (n *omnipage) CountPages(imgFile string) (nPage int, err error) {
+func (n *Omnipage) CountPages(imgFile string) (nPage int, err error) {
 	errBuff := make([]byte, 1024)
 	nPage = 0
 
@@ -318,7 +318,7 @@ func (n *omnipage) CountPages(imgFile string) (nPage int, err error) {
 	return
 }
 
-func (n *omnipage) SetCodePage(codePage string) (err error) {
+func (n *Omnipage) SetCodePage(codePage string) (err error) {
 	errBuff := make([]byte, 1024)
 
 	if C.omnipageSetCodePage(
@@ -335,7 +335,7 @@ func (n *omnipage) SetCodePage(codePage string) (err error) {
 	return
 }
 
-func (n *omnipage) SetOutputFormat(outputFormat string) (err error) {
+func (n *Omnipage) SetOutputFormat(outputFormat string) (err error) {
 	errBuff := make([]byte, 1024)
 
 	if C.omnipageSetOutputFormat(
