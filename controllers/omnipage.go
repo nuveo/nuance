@@ -1,9 +1,11 @@
 package controllers
 
 import (
+	"encoding/base64"
 	"encoding/json"
 	"fmt"
 	"io"
+	"io/ioutil"
 	"log"
 	"math/rand"
 	"mime/multipart"
@@ -52,12 +54,50 @@ func ImgToText(w http.ResponseWriter, r *http.Request) {
 
 		var jr request
 		err := decoder.Decode(&jr)
-
 		if err != nil {
-			panic(err)
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
 		}
 
-		fmt.Println(jr.Base64)
+		buff := []byte{}
+		buff, err = base64.StdEncoding.DecodeString(jr.Base64)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+
+		filename := cfg.TmpPath + "/omnipage_" + randString(20)
+
+		err = ioutil.WriteFile(filename, buff, 0644)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+
+		txt := ""
+		txt, err = ocrFile(filename)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+
+		err = os.Remove(filename)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+
+		resp := response{}
+		resp.Text = txt
+
+		b, err := json.Marshal(resp)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			log.Println(err.Error())
+			return
+		}
+
+		fmt.Fprint(w, string(b))
 
 	} else if contentType == "multipart/form-data" {
 
@@ -128,7 +168,7 @@ func ImgToText(w http.ResponseWriter, r *http.Request) {
 
 		errMsg := "Content-Type: \"" + contentType + "\" not supported"
 		log.Println("Content-Type", contentType)
-		http.Error(w, errMsg, 400)
+		http.Error(w, errMsg, http.StatusBadRequest)
 	}
 }
 
