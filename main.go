@@ -12,6 +12,7 @@ import (
 	"github.com/dgrijalva/jwt-go"
 	"github.com/nuveo/nuance/config"
 	"github.com/nuveo/nuance/controllers"
+	"github.com/nuveo/nuance/omnipage"
 )
 
 func main() {
@@ -24,10 +25,23 @@ func main() {
 		n.Use(jwtMiddleware(cfg.JWTKey))
 	}
 
-	fmt.Println(cfg.OemLicenseFile, cfg.OemCode )
+	op := omnipage.New()
+	err := op.SetLicense(cfg.OemLicenseFile, cfg.OemCode)
+	if err != nil {
+		fmt.Println("SetLicense failed:", err)
+		return
+	}
+
+	err = op.Init(cfg.CompanyName, cfg.ProductName)
+	if err != nil {
+		fmt.Println("Init failed:", err)
+		return
+	}
+
+	controllers.SetOmnipage(&op)
 
 	r := mux.NewRouter()
-	r.HandleFunc("/omnipage", controllers.PostImg).Methods("POST")
+	r.HandleFunc("/omnipage/totext", controllers.ImgToText).Methods("POST")
 
 	n.UseHandler(r)
 	n.Run(fmt.Sprintf(":%v", cfg.HTTPPort))
