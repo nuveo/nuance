@@ -9,4 +9,5 @@ type Nuance struct {
 	OemCode        string `env:"NUANCE_OEM_CODE" envDefault:"OEM_CODE"`
 	CompanyName    string `env:"NUANCE_COMPANY_NAME" envDefault:"YOUR_COMPANY"`
 	ProductName    string `env:"NUANCE_PRODUCT_NAME" envDefault:"YOUR_PRODUCT"`
+	TmpPath        string `env:"NUANCE_TEMP_PATH" envDefault:"/tmp"`
 }

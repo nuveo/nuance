@@ -5,19 +5,21 @@ import (
 	"fmt"
 	"io"
 	"log"
+	"math/rand"
 	"mime/multipart"
 	"net/http"
 	"os"
 	"strings"
+	"time"
 
+	"github.com/nuveo/nuance/config"
 	"github.com/nuveo/nuance/omnipage"
 )
 
 var op *omnipage.Omnipage
+var cfg *config.Nuance
 
-func SetOmnipage(opInstance *omnipage.Omnipage) {
-	op = opInstance
-}
+var letterRunes = []rune("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ")
 
 type request struct {
 	Base64 string
@@ -27,9 +29,21 @@ type response struct {
 	Text string
 }
 
+func init() {
+	rand.Seed(time.Now().UnixNano())
+}
+
+func SetConfig(c *config.Nuance) {
+	cfg = c
+}
+
+func SetOmnipage(opInstance *omnipage.Omnipage) {
+	op = opInstance
+}
+
 func ImgToText(w http.ResponseWriter, r *http.Request) {
 
-	//w.Header().Set("Content-Type", "application/json")
+	w.Header().Set("Content-Type", "application/json")
 
 	contentType := strings.Split(r.Header.Get("Content-Type"), ";")[0]
 
@@ -67,7 +81,7 @@ func ImgToText(w http.ResponseWriter, r *http.Request) {
 
 			log.Println("filename", part.FileName())
 
-			filename := "./aux_" + part.FileName()
+			filename := cfg.TmpPath + "/omnipage_" + randString(20)
 
 			var dst *os.File
 			dst, err = os.Create(filename)
@@ -86,6 +100,7 @@ func ImgToText(w http.ResponseWriter, r *http.Request) {
 			txtAux, err = ocrFile(filename)
 			if err != nil {
 				http.Error(w, err.Error(), http.StatusInternalServerError)
+				return
 			}
 
 			err = os.Remove(filename)
@@ -114,7 +129,6 @@ func ImgToText(w http.ResponseWriter, r *http.Request) {
 		errMsg := "Content-Type: \"" + contentType + "\" not supported"
 		log.Println("Content-Type", contentType)
 		http.Error(w, errMsg, 400)
-
 	}
 }
 
@@ -129,4 +143,12 @@ func ocrFile(fullPath string) (txt string, err error) {
 	}
 
 	return
+}
+
+func randString(n int) string {
+	b := make([]rune, n)
+	for i := range b {
+		b[i] = letterRunes[rand.Intn(len(letterRunes))]
+	}
+	return string(b)
 }

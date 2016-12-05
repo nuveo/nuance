@@ -26,6 +26,7 @@ func main() {
 	}
 
 	op := omnipage.New()
+
 	err := op.SetLicense(cfg.OemLicenseFile, cfg.OemCode)
 	if err != nil {
 		fmt.Println("SetLicense failed:", err)
@@ -39,6 +40,7 @@ func main() {
 	}
 
 	controllers.SetOmnipage(&op)
+	controllers.SetConfig(&cfg)
 
 	r := mux.NewRouter()
 	r.HandleFunc("/omnipage/totext", controllers.ImgToText).Methods("POST")
