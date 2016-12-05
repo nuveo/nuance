@@ -35,11 +35,8 @@ n.Free()
 Processes an image (with template) and extracts information from zones.
 
 ```go
-<<<<<<< HEAD
-=======
 import github.com/nuveo/nuance/omnipage
 
->>>>>>> origin/omnipage
 n := omnipage.New()
 
 // load the license
