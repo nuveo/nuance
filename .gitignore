@@ -45,3 +45,7 @@ nuanceTemp_test.go
 sample.png
 
 sampleUTextWithLinebreaks.txt
+
+# Ignore Mac DS_Store files
+**/.DS_Store
+

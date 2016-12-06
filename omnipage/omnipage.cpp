@@ -1,20 +1,20 @@
-#include "nuance.hpp"
-#include "nuancec.h"
+#include "omnipage.hpp"
+#include "omnipagec.h"
 
 char cCodePage[CODEPAGE_BUFFER_SIZE];
 char cOutputFormat[OUTPUTFMT_BUFFER_SIZE];
 
-nuance::nuance(void) {
+omnipage::omnipage(void) {
     memset(cCodePage, 0, CODEPAGE_BUFFER_SIZE);
     memset(cOutputFormat, 0, OUTPUTFMT_BUFFER_SIZE);
     strncpy(cCodePage, "UTF-8", CODEPAGE_BUFFER_SIZE);
     strncpy(cOutputFormat, "Converters.Text.UFormattedTxt", OUTPUTFMT_BUFFER_SIZE);
 }
 
-nuance::~nuance(void) {
+omnipage::~omnipage(void) {
 }
 
-void nuance::errMsg(RECERR rc, char* errBuff, int errBuffSize) {
+void omnipage::errMsg(RECERR rc, char* errBuff, int errBuffSize) {
     LONG ErrExt;
     char szBuff[ERR_BUFFER_SIZE];
     char errStr[ERR_BUFFER_SIZE];
@@ -37,12 +37,12 @@ void nuance::errMsg(RECERR rc, char* errBuff, int errBuffSize) {
     strncpy(errBuff, szBuff, errBuffSize);
 }
 
-void nuance::errStrMsg(const char* msg, char* errBuff, int errBuffSize) {
+void omnipage::errStrMsg(const char* msg, char* errBuff, int errBuffSize) {
     memset(errBuff, 0, errBuffSize);
     strncpy(errBuff, msg, errBuffSize);
 }
 
-int nuance::SetLicense(const char *licenceFile,
+int omnipage::SetLicense(const char *licenceFile,
                        const char *oemCode,
                        char *errBuff,
                        const int errSize) {
@@ -56,7 +56,7 @@ int nuance::SetLicense(const char *licenceFile,
     return 0;
 }
 
-int nuance::Init(const char *company,
+int omnipage::Init(const char *company,
                  const char *product,
                  char *errBuff,
                  const int errSize) {
@@ -89,12 +89,12 @@ int nuance::Init(const char *company,
     return 0;
 }
 
-void nuance::Quit(void) {
+void omnipage::Quit(void) {
     RecQuitPlus();
     kRecQuit();
 }
 
-int nuance::LoadFormTemplateLibrary(const char *templateFile,
+int omnipage::LoadFormTemplateLibrary(const char *templateFile,
                                     char *errBuff,
                                     const int errSize) {
 
@@ -111,7 +111,7 @@ int nuance::LoadFormTemplateLibrary(const char *templateFile,
     return 0;
 }
 
-int nuance::PreprocessImgWithTemplate(const char *imgFile,
+int omnipage::PreprocessImgWithTemplate(const char *imgFile,
                                       char *errBuff,
                                       const int errSize) {
     RECERR rc = kRecLoadImgF(0, imgFile, &this->hPage, -1);
@@ -206,7 +206,7 @@ int nuance::PreprocessImgWithTemplate(const char *imgFile,
     return 0;
 }
 
-int nuance::getZoneData(const int zoneID,
+int omnipage::getZoneData(const int zoneID,
                         char *zoneName,
                         const int zoneNameSize,
                         char *zoneText,
@@ -235,11 +235,11 @@ int nuance::getZoneData(const int zoneID,
 
 }
 
-int nuance::getZoneCount(void) {
+int omnipage::getZoneCount(void) {
     return this->ZoneCount;
 }
 
-int nuance::FreeImgWithTemplate(void) {
+int omnipage::FreeImgWithTemplate(void) {
     kRecFreeFormTemplateCollection(this->hFormTmplCollection);
     kRecFreeFormTemplateArray(this->hFormTemplateArray,
                               this->hFormTemplateArrayLen, TRUE);
@@ -247,7 +247,7 @@ int nuance::FreeImgWithTemplate(void) {
     kRecQuit();
 }
 
-int nuance::OCRImgToFile(const char *imgFile,
+int omnipage::OCRImgToFile(const char *imgFile,
                          const char *outputFile,
                          const int nPage,
                          const char *auxDocumentFile,
@@ -325,7 +325,7 @@ int nuance::OCRImgToFile(const char *imgFile,
     return 0;
 }
 
-int nuance::OCRImgToTextFile(const char *imgFile,
+int omnipage::OCRImgToTextFile(const char *imgFile,
                          const char *outputFile,
                          const int nPage,
                          const char *auxDocumentFile,
@@ -402,7 +402,7 @@ int nuance::OCRImgToTextFile(const char *imgFile,
 }
 
 // TODO: find a more generic way to set the language, without using "define" in the Golang side.
-int nuance::SetLanguagePtBr(char *errBuff, const int errSize) {
+int omnipage::SetLanguagePtBr(char *errBuff, const int errSize) {
     RECERR      rc;
     LANG_ENA    pLang[LANG_SIZE];
 
@@ -422,7 +422,7 @@ int nuance::SetLanguagePtBr(char *errBuff, const int errSize) {
     return 0;
 }
 
-int nuance::CountPages(const char *imgFile,
+int omnipage::CountPages(const char *imgFile,
                        int *nPages,
                        char *errBuff,
                        const int errSize) {
@@ -448,7 +448,7 @@ int nuance::CountPages(const char *imgFile,
     return 0;
 }
 
-int nuance::SetCodePage(const char *codePage,
+int omnipage::SetCodePage(const char *codePage,
                        char *errBuff,
                        const int errSize) {
     RECERR rc;
@@ -464,7 +464,7 @@ int nuance::SetCodePage(const char *codePage,
     return 0;
 }
 
-int nuance::SetOutputFormat(const char *outputFormat,
+int omnipage::SetOutputFormat(const char *outputFormat,
                             char *errBuff,
                             const int errSize) {
     RECERR rc;

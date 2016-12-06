@@ -1,5 +1,5 @@
-#ifndef __NUANCE_HPP__
-#define __NUANCE_HPP__
+#ifndef __OMNIPAGE_HPP__
+#define __OMNIPAGE_HPP__
 
 #include <cstdio>
 #include <cstring>
@@ -7,7 +7,7 @@
 #include <recpdf.h>
 #include <RecApiPlus.h>
 
-class nuance {
+class omnipage {
 private:
     HFORMTEMPLATEPAGE *hFormTemplateArray;
     HFORMTEMPLATECOLLECTION hFormTmplCollection;
@@ -16,8 +16,8 @@ private:
     int ZoneCount;
 
 public:
-    nuance(void);
-    ~nuance();
+    omnipage(void);
+    ~omnipage();
 
     void errMsg(RECERR rc, char* errBuff, int errBuffSize);
     void errStrMsg(const char* msg, char* errBuff, int errBuffSize);

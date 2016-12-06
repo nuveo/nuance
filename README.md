@@ -15,7 +15,7 @@ As a result this package does not exposes the complete Nuance C API but instead 
 ### SetLicence and initialise
 
 ```go
-n := nuance.New()
+n := omnipage.New()
 err := n.SetLicense("licence.lcxz", "OEM_CODE")
 if err != nil {
     error.Fatal("SetLicense failed:", err)
@@ -35,7 +35,9 @@ n.Free()
 Processes an image (with template) and extracts information from zones.
 
 ```go
-n := nuance.New()
+import github.com/nuveo/nuance/omnipage
+
+n := omnipage.New()
 
 // load the license
 err := n.SetLicense("licence.lcxz", "OEM_CODE")
@@ -90,7 +92,8 @@ dpkg -i nuance-omnipage-csdk-devel_19.2-15521.100_amd64.deb
 Then download the package
 
 ```
-go get github.com/nuveo/nuance
+go get github.com/nuveo/nuance/omnipage
+go get github.com/nuveo/nuance/controllers
 ```
 
 To activate your licenses use the following command
