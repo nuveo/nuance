@@ -105,6 +105,15 @@ oplicmgr -c OEM_CODE -N licence.lcxz PRODUCT_KEY1 PRODUCT_KEY2 PRODUCT_KEY3
 You will need your license file and your OEM code in all the examples and tests.
 
 
+## Docker
+
+Edit **docker-compose.yml** update Nuance license and:
+
+```
+docker-compose up --buld
+```
+
+
 ## License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details
