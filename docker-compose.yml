@@ -1,0 +1,6 @@
+version: "2"
+services:
+  nuance:
+    build: .
+    environment:
+      - NUANCE_KEY=nuance.lcxz 0000-000-0000-0000-00 00000-000-0000-0000-00 00000-000-0000-0000-00 00000-000-0000-0000-00
