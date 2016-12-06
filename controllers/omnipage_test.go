@@ -4,10 +4,14 @@ import (
 	"bytes"
 	"encoding/base64"
 	"encoding/json"
+	"fmt"
+	"io"
 	"io/ioutil"
 	"log"
+	"mime/multipart"
 	"net/http"
 	"net/http/httptest"
+	"os"
 	"strings"
 	"testing"
 
@@ -95,4 +99,90 @@ func TestTotextApplicationJson(t *testing.T) {
 		t.Error("Error: string does not contain expected substring.")
 	}
 
+}
+
+func TestTotextMultipartFormData(t *testing.T) {
+	startOmnipage()
+
+	router := mux.NewRouter()
+	router.HandleFunc("/omnipage/totext", ImgToText).Methods("POST")
+	server := httptest.NewServer(router)
+	defer server.Close()
+
+	files := []string{"../test_assets/testFile.png"}
+
+	reader, err := post(server.URL+"/omnipage/totext", files)
+	if err != nil {
+		t.Fatal("reader:", err)
+	}
+
+	//io.Copy(os.Stdout, reader)
+	decoder := json.NewDecoder(reader)
+
+	var rp response
+	err = decoder.Decode(&rp)
+	if err != nil {
+		t.Fatal("Decode:", err)
+	}
+
+	//fmt.Println(rp.Text)
+	txt := strings.Replace(rp.Text, "  ", " ", -1)
+	if !strings.Contains(txt, "It is a test.") {
+		t.Error("Error: string does not contain expected substring.")
+	}
+}
+
+func post(url string, files []string) (bodyReader io.Reader, err error) {
+
+	var b bytes.Buffer
+	w := multipart.NewWriter(&b)
+
+	for k, v := range files {
+		var f *os.File
+		f, err = os.Open(v)
+		if err != nil {
+			return
+		}
+
+		var fw io.Writer
+		fw, err = w.CreateFormFile("image_"+string(k), v)
+		if err != nil {
+			return
+		}
+
+		if _, err = io.Copy(fw, f); err != nil {
+			return
+		}
+		f.Close()
+	}
+
+	w.Close()
+
+	req, err := http.NewRequest("POST", url, &b)
+	if err != nil {
+		return
+	}
+
+	req.Header.Set("Content-Type", w.FormDataContentType())
+
+	client := &http.Client{}
+	res, err := client.Do(req)
+	if err != nil {
+		return
+	}
+
+	if res.StatusCode != http.StatusOK {
+		err = fmt.Errorf("bad status: %s", res.Status)
+	}
+
+	//io.Copy(os.Stdout, res.Body)
+
+	//var bAux []byte
+	//bAux, err = ioutil.ReadAll(res.Body)
+
+	//txt = string(bAux)
+	//res.Body.Close()
+
+	bodyReader = res.Body
+	return
 }
