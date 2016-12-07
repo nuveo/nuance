@@ -1,0 +1,43 @@
+{
+	"comment": "",
+	"ignore": "test",
+	"package": [
+		{
+			"checksumSHA1": "7G7ADsNRwBcyfkJyTrX1oW4I0Rs=",
+			"path": "github.com/auth0/go-jwt-middleware",
+			"revision": "f3f7de3b9e394e3af3b88e1b9457f6f71d1ae0ac",
+			"revisionTime": "2016-04-21T21:57:38Z"
+		},
+		{
+			"checksumSHA1": "yvBo82+sKNvyAHFgKBGPRzp5rNc=",
+			"path": "github.com/caarlos0/env",
+			"revision": "d0de832ed2fbc4e7bfaa30ab5cf0b3417d15f529",
+			"revisionTime": "2016-10-13T20:18:42Z"
+		},
+		{
+			"checksumSHA1": "2Fy1Y6Z3lRRX1891WF/+HT4XS2I=",
+			"path": "github.com/dgrijalva/jwt-go",
+			"revision": "9ed569b5d1ac936e6494082958d63a6aa4fff99a",
+			"revisionTime": "2016-11-01T19:39:35Z"
+		},
+		{
+			"checksumSHA1": "iIUYZyoanCQQTUaWsu8b+iOSPt4=",
+			"path": "github.com/gorilla/context",
+			"revision": "1c83b3eabd45b6d76072b66b746c20815fb2872d",
+			"revisionTime": "2015-08-20T05:12:45Z"
+		},
+		{
+			"checksumSHA1": "SFyZRbcgdCFpvOrPYNv3UJ3rO4Q=",
+			"path": "github.com/gorilla/mux",
+			"revision": "9c068cf16d982f8bd444b8c352acbeec34c4fe5b",
+			"revisionTime": "2015-11-11T10:35:30Z"
+		},
+		{
+			"checksumSHA1": "MJw194u4PprQAabBORjIp1tPUwM=",
+			"path": "github.com/urfave/negroni",
+			"revision": "cd9734011043904139c24dbad9a71b21f1586f36",
+			"revisionTime": "2016-11-27T19:24:14Z"
+		}
+	],
+	"rootPath": "github.com/nuveo/nuance"
+}

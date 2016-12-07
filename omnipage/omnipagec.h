@@ -1,5 +1,5 @@
-#ifndef __NUANCEC_H__
-#define __NUANCEC_H__
+#ifndef __OMNIPAGEC_H__
+#define __OMNIPAGEC_H__
 
 #define ERR_BUFFER_SIZE 1024
 #define CODEPAGE_BUFFER_SIZE 254
@@ -14,47 +14,47 @@ void RecSample(void);
 
 
 
-typedef void* nuancePtr;
+typedef void* omnipagePtr;
 
-nuancePtr nuanceNew(void);
-void nuanceFree(nuancePtr h);
+omnipagePtr omnipageNew(void);
+void omnipageFree(omnipagePtr h);
 
-int nuanceSetLicense(nuancePtr n,
+int omnipageSetLicense(omnipagePtr n,
                      const char *licenceFile,
                      const char *oemCode,
                      char *errBuff,
                      const int errSize);
 
-void nuanceQuit(nuancePtr n);
+void omnipageQuit(omnipagePtr n);
 
-int nuanceInit(nuancePtr n,
+int omnipageInit(omnipagePtr n,
                const char *company,
                const char *product,
                char *errBuff,
                const int errSize);
 
-int nuanceLoadFormTemplateLibrary(nuancePtr n,
+int omnipageLoadFormTemplateLibrary(omnipagePtr n,
                                   const char *templateFile,
                                   char *errBuff,
                                   const int errSize);
 
-int nuancePreprocessImgWithTemplate(nuancePtr n,
+int omnipagePreprocessImgWithTemplate(omnipagePtr n,
                                     const char *imgFile,
                                     char *errBuff,
                                     const int errSize);
 
-int nuanceGetZoneCount(nuancePtr n);
+int omnipageGetZoneCount(omnipagePtr n);
 
-int nuanceGetZoneData(nuancePtr n,
+int omnipageGetZoneData(omnipagePtr n,
                       const int zoneID,
                       char *zoneName,
                       const int zoneNameSize,
                       char *zoneText,
                       const int zoneTextSize);
 
-void nuanceFreeImgWithTemplate(nuancePtr n);
+void omnipageFreeImgWithTemplate(omnipagePtr n);
 
-int nuanceOCRImgToFile(nuancePtr n,
+int omnipageOCRImgToFile(omnipagePtr n,
     const char *imgFile,
     const char *outputFile,
     const int nPage,
@@ -62,7 +62,7 @@ int nuanceOCRImgToFile(nuancePtr n,
     char *errBuff,
     const int errSize);
 
-int nuanceOCRImgToTextFile(nuancePtr n,
+int omnipageOCRImgToTextFile(omnipagePtr n,
                        const char *imgFile,
                        const char *outputFile,
                        const int nPage,
@@ -70,22 +70,22 @@ int nuanceOCRImgToTextFile(nuancePtr n,
                        char *errBuff,
                        const int errSize);
 
-int nuanceSetLanguagePtBr(nuancePtr n,
+int omnipageSetLanguagePtBr(omnipagePtr n,
                           char *errBuff,
                           const int errSize);
 
-int nuanceCountPages(nuancePtr n,
+int omnipageCountPages(omnipagePtr n,
                      const char *imgFile,
                      int *nPages,
                      char *errBuff,
                      const int errSize);
 
-int nuanceSetCodePage(nuancePtr n,
+int omnipageSetCodePage(omnipagePtr n,
                       const char *codePage,
                       char *errBuff,
                       const int errSize);
 
-int nuanceSetOutputFormat(nuancePtr n,
+int omnipageSetOutputFormat(omnipagePtr n,
                           const char *outputFormat,
                           char *errBuff,
                           const int errSize);
