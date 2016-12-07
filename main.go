@@ -44,6 +44,7 @@ func main() {
 
 	r := mux.NewRouter()
 	r.HandleFunc("/omnipage/totext", controllers.ImgToText).Methods("POST")
+	r.HandleFunc("/omnipage/ocrwithtemplate", controllers.ImgWithTemplate).Methods("POST")
 
 	n.UseHandler(r)
 	n.Run(fmt.Sprintf(":%v", cfg.HTTPPort))
