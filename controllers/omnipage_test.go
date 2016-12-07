@@ -41,97 +41,6 @@ func startOmnipage() {
 	SetConfig(&cfg)
 }
 
-func TestOcrFile(t *testing.T) {
-	startOmnipage()
-
-	txt, err := ocrFile("../test_assets/testFile.png")
-	if err != nil {
-		t.Fatal("ocrFile:", err)
-	}
-	txt = strings.Replace(txt, "  ", " ", -1)
-	if !strings.Contains(txt, "It is a test.") {
-		t.Error("Error: string does not contain expected substring.")
-	}
-}
-
-func TestTotextApplicationJson(t *testing.T) {
-	startOmnipage()
-
-	router := mux.NewRouter()
-	router.HandleFunc("/omnipage/totext", ImgToText).Methods("POST")
-	server := httptest.NewServer(router)
-	defer server.Close()
-
-	pathPth := "../test_assets/testFile.png"
-
-	buff, err := ioutil.ReadFile(pathPth)
-	if err != nil {
-		t.Fatal("ReadFile:", err)
-		return
-	}
-
-	r := request{}
-	r.Base64 = base64.StdEncoding.EncodeToString(buff)
-
-	jsonBuffer := new(bytes.Buffer)
-	json.NewEncoder(jsonBuffer).Encode(r)
-
-	res, err := http.Post(server.URL+"/omnipage/totext",
-		"application/json; charset=utf-8",
-		jsonBuffer)
-	if err != nil {
-		t.Fatal("POST:", err)
-		return
-	}
-
-	//io.Copy(os.Stdout, res.Body)
-	decoder := json.NewDecoder(res.Body)
-
-	var rp response
-	err = decoder.Decode(&rp)
-	if err != nil {
-		t.Fatal("Decode:", err)
-	}
-
-	//fmt.Println(rp.Text)
-	txt := strings.Replace(rp.Text, "  ", " ", -1)
-	if !strings.Contains(txt, "It is a test.") {
-		t.Error("Error: string does not contain expected substring.")
-	}
-
-}
-
-func TestTotextMultipartFormData(t *testing.T) {
-	startOmnipage()
-
-	router := mux.NewRouter()
-	router.HandleFunc("/omnipage/totext", ImgToText).Methods("POST")
-	server := httptest.NewServer(router)
-	defer server.Close()
-
-	files := []string{"../test_assets/testFile.png"}
-
-	reader, err := post(server.URL+"/omnipage/totext", files)
-	if err != nil {
-		t.Fatal("reader:", err)
-	}
-
-	//io.Copy(os.Stdout, reader)
-	decoder := json.NewDecoder(reader)
-
-	var rp response
-	err = decoder.Decode(&rp)
-	if err != nil {
-		t.Fatal("Decode:", err)
-	}
-
-	//fmt.Println(rp.Text)
-	txt := strings.Replace(rp.Text, "  ", " ", -1)
-	if !strings.Contains(txt, "It is a test.") {
-		t.Error("Error: string does not contain expected substring.")
-	}
-}
-
 func post(url string, files []string) (bodyReader io.Reader, err error) {
 
 	var b bytes.Buffer
@@ -185,4 +94,180 @@ func post(url string, files []string) (bodyReader io.Reader, err error) {
 
 	bodyReader = res.Body
 	return
+}
+
+func TestOcrFile(t *testing.T) {
+	startOmnipage()
+
+	txt, err := ocrFile("../test_assets/testFile.png")
+	if err != nil {
+		t.Fatal("ocrFile:", err)
+	}
+	txt = strings.Replace(txt, "  ", " ", -1)
+	if !strings.Contains(txt, "It is a test.") {
+		t.Error("Error: string does not contain expected substring.")
+	}
+}
+
+func TestTotextApplicationJson(t *testing.T) {
+	startOmnipage()
+
+	router := mux.NewRouter()
+	router.HandleFunc("/omnipage/totext", ImgToText).Methods("POST")
+	server := httptest.NewServer(router)
+	defer server.Close()
+
+	pathPth := "../test_assets/testFile.png"
+
+	buff, err := ioutil.ReadFile(pathPth)
+	if err != nil {
+		t.Fatal("ReadFile:", err)
+	}
+
+	r := request{}
+	r.Base64 = base64.StdEncoding.EncodeToString(buff)
+
+	jsonBuffer := new(bytes.Buffer)
+	json.NewEncoder(jsonBuffer).Encode(r)
+
+	res, err := http.Post(server.URL+"/omnipage/totext",
+		"application/json; charset=utf-8",
+		jsonBuffer)
+	if err != nil {
+		t.Fatal("POST:", err)
+	}
+
+	//io.Copy(os.Stdout, res.Body)
+	decoder := json.NewDecoder(res.Body)
+
+	var rp response
+	err = decoder.Decode(&rp)
+	if err != nil {
+		t.Fatal("Decode:", err)
+	}
+
+	//fmt.Println(rp.Text)
+	txt := strings.Replace(rp.Text, "  ", " ", -1)
+	if !strings.Contains(txt, "It is a test.") {
+		t.Error("Error: string does not contain expected substring.")
+	}
+
+}
+
+func TestTotextMultipartFormData(t *testing.T) {
+	startOmnipage()
+
+	router := mux.NewRouter()
+	router.HandleFunc("/omnipage/totext", ImgToText).Methods("POST")
+	server := httptest.NewServer(router)
+	defer server.Close()
+
+	files := []string{"../test_assets/testFile.png"}
+
+	reader, err := post(server.URL+"/omnipage/totext", files)
+	if err != nil {
+		t.Fatal("reader:", err)
+	}
+
+	//io.Copy(os.Stdout, reader)
+	decoder := json.NewDecoder(reader)
+
+	var rp response
+	err = decoder.Decode(&rp)
+	if err != nil {
+		t.Fatal("Decode:", err)
+	}
+
+	//fmt.Println(rp.Text)
+	txt := strings.Replace(rp.Text, "  ", " ", -1)
+	if !strings.Contains(txt, "It is a test.") {
+		t.Error("Error: string does not contain expected substring.")
+	}
+}
+
+func TestApplicationJsonWithTemplate(t *testing.T) {
+	startOmnipage()
+
+	router := mux.NewRouter()
+	router.HandleFunc("/omnipage/ocrwithtemplate", ImgWithTemplate).Methods("POST")
+	server := httptest.NewServer(router)
+	defer server.Close()
+
+	templateFile := "../template.tlz"
+	imgFile := "../sample.tif"
+
+	buff, err := ioutil.ReadFile(templateFile)
+	if err != nil {
+		t.Fatal("ReadFile:", err)
+	}
+
+	r := requestWithTemplate{}
+	r.TemplateBase64 = base64.StdEncoding.EncodeToString(buff)
+
+	buff, err = ioutil.ReadFile(imgFile)
+	if err != nil {
+		t.Fatal("ReadFile:", err)
+	}
+
+	r.Base64 = base64.StdEncoding.EncodeToString(buff)
+
+	jsonBuffer := new(bytes.Buffer)
+	json.NewEncoder(jsonBuffer).Encode(r)
+
+	res, err := http.Post(server.URL+"/omnipage/ocrwithtemplate",
+		"application/json; charset=utf-8",
+		jsonBuffer)
+	if err != nil {
+		t.Fatal("POST:", err)
+	}
+
+	//io.Copy(os.Stdout, res.Body)
+
+	var msgMapTemplate interface{}
+	var bAux []byte
+	bAux, err = ioutil.ReadAll(res.Body)
+
+	err = json.Unmarshal(bAux, &msgMapTemplate)
+	if err != nil {
+		t.Fatal("Unmarshal:", err)
+	}
+
+	msgMap := msgMapTemplate.(map[string]interface{})
+
+	for k, v := range msgMap {
+		fmt.Println(k, ":", v)
+	}
+
+}
+
+func TestMultipartFormDataWithTemplate(t *testing.T) {
+	startOmnipage()
+
+	router := mux.NewRouter()
+	router.HandleFunc("/omnipage/ocrwithtemplate", ImgWithTemplate).Methods("POST")
+	server := httptest.NewServer(router)
+	defer server.Close()
+
+	files := []string{"../template.tlz", "../sample.tif"}
+
+	res, err := post(server.URL+"/omnipage/ocrwithtemplate", files)
+	if err != nil {
+		t.Fatal("reader:", err)
+	}
+
+	//io.Copy(os.Stdout, reader)
+	var msgMapTemplate interface{}
+	var bAux []byte
+	bAux, err = ioutil.ReadAll(res)
+
+	err = json.Unmarshal(bAux, &msgMapTemplate)
+	if err != nil {
+		t.Fatal("Unmarshal:", err)
+	}
+
+	msgMap := msgMapTemplate.(map[string]interface{})
+
+	for k, v := range msgMap {
+		fmt.Println(k, ":", v)
+	}
 }
