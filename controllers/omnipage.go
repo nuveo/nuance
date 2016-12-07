@@ -133,7 +133,6 @@ func ImgWithTemplate(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 
-		txt := ""
 		for {
 			var part *multipart.Part
 			part, err = reader.NextPart()
